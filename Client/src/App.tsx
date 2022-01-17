@@ -1,8 +1,16 @@
+import {Routes,Route} from "react-router-dom"
+
 import Main from "./Components/Main/Main";
+import Login from "./Components/Login/Login"
+import Register from "./Components/Register/Register"
 
 function App() {
   return (
-    <Main />
+    <Routes>
+      <Route path="/" element={<Main />}/>
+      <Route path="/login" element={<Login />}/>
+      <Route path="/register" element={<Register />}/>
+    </Routes>
   );
 }
 

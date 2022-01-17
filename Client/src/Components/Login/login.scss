@@ -1,0 +1,57 @@
+@import "../../mainColors";
+.loginContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  .formContainer {
+    padding: 1.5rem;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+      rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    border-radius: 1rem;
+  }
+  form {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    input:not([type="submit"]) {
+      padding: 0.1rem;
+      font-size: 1.1rem;
+      margin: 0.3rem;
+      border: 1px solid transparent;
+      border-bottom: 1px solid $third;
+      text-align: center;
+      outline: none;
+      &:focus {
+        border: 1px solid $third;
+        text-align: left;
+      }
+    }
+    input[type="submit"] {
+      margin-top: 0.5rem;
+      padding: 0.1rem 1rem;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      background-color: $second;
+      border: none;
+      color: $main;
+      border-radius: 1px;
+      transition: 0.2s all;
+      &:hover {
+        background-color: $third;
+      }
+    }
+  }
+  p {
+    margin-top: 0.3rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-align: center;
+  }
+  a {
+    color: $third;
+  }
+}

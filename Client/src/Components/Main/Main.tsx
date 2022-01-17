@@ -1,13 +1,15 @@
 import "./main.scss"
+import {Link} from "react-router-dom"
+import {Logo} from "../SharedComponents/sharedComponents"
 
 function Main() {
     return (
     <section className="mainContainer">
       <div className="subContainer">
-        <h1><img className="wing" src="/Images/wing.svg" />Quick Chat<img className="wing" src="/Images/wing.svg" /></h1>
+       <Logo />
         <div className="btnContainer">
-          <button className="loginBtns">Login</button>
-          <button className="loginBtns">Register</button>
+          <Link to="/login" className="loginBtns">Login</Link>
+          <Link to="/register" className="loginBtns">Register</Link>
         </div>
       </div>
       <img className="backgroundImage" src="/Images/social.svg" />
