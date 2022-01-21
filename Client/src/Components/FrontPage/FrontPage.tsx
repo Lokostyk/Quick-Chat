@@ -1,8 +1,8 @@
-import "./main.scss"
+import "./frontPage.scss"
 import {Link} from "react-router-dom"
 import {Logo} from "../SharedComponents/sharedComponents"
 
-function Main() {
+function FrontPage() {
     return (
     <section className="mainContainer">
       <div className="subContainer">
@@ -17,4 +17,4 @@ function Main() {
     )
 }
 
-export default Main
+export default FrontPage

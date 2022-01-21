@@ -2,8 +2,8 @@ export {}
 const router = require("express").Router() 
 const userModel = require("../Models/userModel")
 
-router.get("/",async (req,res)=>{
-    const userData = await userModel.findOne(res.body)
+router.post("/login",async (req,res)=>{
+    const userData = await userModel.findOne(req.body)
     try {
         res.send(userData)
     }catch (err){

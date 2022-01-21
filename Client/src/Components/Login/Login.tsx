@@ -10,23 +10,26 @@ export default function Login() {
 
     const hanldeLogIn = useCallback((e)=>{
         e.preventDefault()
-        axios.get(`${URL}/handleUser`)
+        axios.post(`${URL}/handleUser/login`,userData)
         .then(res=>{
             console.log(res)
         })
         .catch(err=>{
             console.log(err)
         })
-    },[])
+    },[userData])
+    const handleChange = useCallback((e)=>{
+        setUserData({...userData,[e.target.name]:e.target.value})
+    },[userData])
     return (
         <section className="loginContainer">
             <div className="formContainer">
                 <Logo />
                 <form onSubmit={(e)=>hanldeLogIn(e)}>
                     <input type="email" placeholder="E-mail" value={userData.email}
-                    onChange={(e)=>setUserData({...userData,email:e.target.value})} required/>
+                    onChange={(e)=>handleChange(e)} name="email" required/>
                     <input type="password" placeholder="Password" value={userData.password}
-                    onChange={(e)=>setUserData({...userData,password:e.target.value})} required/>
+                    onChange={(e)=>handleChange(e)} name="password" required/>
                     <input type="submit" value="Log In"/>
                 </form>
                 <p>Don't have an account? <Link to="/register"><b>Sign up</b></Link></p>
