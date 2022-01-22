@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;1,400&display=swap");
+@import "./mainColors";
 * {
   box-sizing: border-box;
   margin: 0;
@@ -6,5 +7,5 @@
   font-family: Ubuntu;
 }
 body {
-  background-color: #daeef7;
+  background-color: $main;
 }
