@@ -2,11 +2,11 @@ export {}
 const moongose = require("mongoose")
 
 const userSchema = new moongose.Schema({
-    userName: {
+    name: {
         type: String,
         required: true
     },
-    userSurname: {
+    surname: {
         type: String,
         required: true
     },

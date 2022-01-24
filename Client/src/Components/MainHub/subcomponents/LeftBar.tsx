@@ -1,4 +1,9 @@
+import { useEffect } from "react"
+import { useAppSelector } from "../../../App/hooks"
+
 export default function LeftBar() {
+  const state = useAppSelector(state=>state.userSlice)
+
   return (
     <div className="leftBarContainer">
         <div className="searchConatiner">
@@ -43,7 +48,7 @@ export default function LeftBar() {
         </div>
         <div className="bottomInfo">
           <img src="/Images/eye.jpg" />
-          <h2>Marcin Ziemba</h2>
+          <h2>{`${state.name} ${state.surname}`}</h2>
           <div className="settingsContainer">
               <div className="settings">
                 OK

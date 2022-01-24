@@ -8,21 +8,25 @@ type FormData = {
     [key:string]:string
 }
 export default function Register() {
-    const InitialData = {userName:"",userSurname:"",email:"",passwordOne:"",passwordTwo:""}
+    const InitialData = {name:"",surname:"",email:"",passwordOne:"",passwordTwo:""}
     const [formData,setFormData] = useState<FormData>(InitialData)
     const [alert,setAlert] = useState("")
-
-    console.log();
 
     const handleLogin = useCallback((e:React.FormEvent)=>{
         e.preventDefault()
         if(formData.passwordOne === formData.passwordTwo){
-            const finalUserData = {userName:formData.userName,userSurname:formData.userSurname,
+            const finalUserData = {name:formData.name,surname:formData.surname,
             email:formData.email,password:formData.passwordOne}
 
             axios
             .post(`${URL}/handleUser`,finalUserData)
-            .then(()=>window.location.pathname = window.location.origin + "/login")
+            .then((res)=>{
+                if(res.data !== "Success"){
+                    setAlert(res.data)
+                }else {
+                    window.location.pathname = "/login"
+                }
+            })
             .catch((err)=>console.log(err))
         }else{
             setAlert("Passwords must be the same!")
@@ -36,19 +40,19 @@ export default function Register() {
             <div className="formContainer">
                 <Logo />
                 <form onSubmit={(e)=>handleLogin(e)}>
-                    <p className="alert">{alert}</p>
+                    <p className="simpleAlert">{alert}</p>
                     <div>
-                        <input type="text" placeholder="Name" value={formData.userName}
-                        onChange={(e)=>handleChange(e)} name="userName" required/>
-                        <input type="text" placeholder="Surname" value={formData.userSurname}
-                        onChange={(e)=>handleChange(e)} name="userSurname" required/>
+                        <input type="text" placeholder="Name" value={formData.name}
+                        onChange={handleChange} name="name" required/>
+                        <input type="text" placeholder="Surname" value={formData.surname}
+                        onChange={handleChange} name="surname" required/>
                     </div>
                     <input type="email" placeholder="E-mail" value={formData.email}
-                    onChange={(e)=>handleChange(e)} name="email" required/>
+                    onChange={handleChange} name="email" required/>
                     <input type="password" placeholder="Password" value={formData.passwordOne}
-                    onChange={(e)=>handleChange(e)} name="passwordOne" minLength={8} maxLength={20} required/>
+                    onChange={handleChange} name="passwordOne" minLength={8} maxLength={20} required/>
                     <input type="password" placeholder="Repeat password" value={formData.passwordTwo}
-                    onChange={(e)=>handleChange(e)} name="passwordTwo" minLength={8} maxLength={20} required/>
+                    onChange={handleChange} name="passwordTwo" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Sign in"/>
                 </form>
             </div>
