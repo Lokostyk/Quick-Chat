@@ -1,3 +1,8 @@
-$main: #daeef7;
-$second: #3088a4;
-$third: #835cc1;
+:root {
+  --main-color: #daeef7;
+  --second-color: #3088a4;
+  --third-color: #835cc1;
+}
+$main: var(--main-color);
+$second: var(--second-color);
+$third: var(--third-color);
