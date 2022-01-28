@@ -67,7 +67,7 @@
       margin: 0 0.6rem 0 auto;
       position: relative;
       .settings {
-        display: flex;
+        display: none;
         flex-direction: column;
         border: 5px solid $second;
         position: absolute;
@@ -89,6 +89,9 @@
           transform: rotate(45deg) translate(-50%, 0);
           z-index: -1;
         }
+      }
+      .openSettings {
+        display: flex;
       }
       .settingsBtn {
         padding: 0.3rem 0.6rem;
@@ -125,7 +128,7 @@
           }
         }
         .active {
-          outline: 2px solid red;
+          outline: 2px solid red !important;
         }
       }
       .logOutBtn {
