@@ -86,7 +86,7 @@ export default function LeftBar() {
             </button>
           </div>
         </div>
-        {accountSettings?<AccountSettings />:""}
+        {accountSettings?<AccountSettings setAccountSettings={setAccountSettings}/>:""}
     </div>
   )
 }

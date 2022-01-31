@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export interface UserData {
+    _id:string
     name:string,
     surname:string,
     email:string,
@@ -9,6 +10,7 @@ export interface UserData {
 }
 
 const initialState:UserData = {
+    _id:"",
     name:"",
     surname:"",
     email:"",

@@ -12,7 +12,62 @@
   backdrop-filter: blur(2px);
   z-index: 1;
   .accountSettings {
+    padding: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: $main;
     color: $third;
+    border-radius: 15px;
+    .closeSettings {
+      padding: 0.3rem;
+      display: flex;
+      align-items: center;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      border: none;
+      cursor: pointer;
+      background-color: #fd6961;
+      border-radius: 50%;
+      img {
+        margin-left: 1px;
+      }
+    }
+    h1 {
+      font-size: 2rem;
+    }
+    form {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      div {
+        input {
+          margin: 0 0.5%;
+          width: 48%;
+        }
+      }
+      input:not([type="submit"]) {
+        padding: 0.1rem 0.2rem;
+        margin: 0.1rem;
+        font-size: 1.1rem;
+      }
+      input[type="submit"] {
+        padding: 0.2rem 1rem;
+        margin: 0.3rem 0;
+        font-size: 1.1rem;
+        border: 1px solid $third;
+        background-color: $main;
+        color: $third;
+        transition: 0.3s all;
+        &:hover {
+          border: 1px solid $main;
+          background-color: $third;
+          color: $main;
+        }
+      }
+    }
   }
 }
