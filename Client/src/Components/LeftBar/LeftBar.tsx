@@ -1,5 +1,5 @@
 import "./leftBar.scss"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { useAppSelector } from "../../App/hooks"
 import AccountSettings from "../AccountSettings/AccountSettings"
 

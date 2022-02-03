@@ -29,8 +29,12 @@ router.post("/",async (req,res)=>{
 })
 
 router.patch("/updateUserData",async (req,res)=>{
-    console.log({_id:req.body._id});
-    const bob = await userModel.updateOne({_id:req.body._id},{name:req.body.name,surname:req.body.surname,email:req.body.email})
+    if(req.body.name){
+        await userModel.updateOne({_id:req.body._id},{name:req.body.name,surname:req.body.surname,email:req.body.email})
+        .catch(err=>console.log(err))
+    }else {
+        await userModel.updateOne({_id:req.body._id},{password:req.body.password})
+    }
 })
 
 module.exports = router

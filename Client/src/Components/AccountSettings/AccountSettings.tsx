@@ -1,7 +1,8 @@
 import "./accountSettings.scss"
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { useAppSelector } from "../../App/hooks"
+import { useAppSelector,useAppDispatch } from "../../App/hooks"
+import {changeUserData} from "../../App/Reducers/userData"
 import {URL} from "../../databaseUrl"
 
 interface formData {
@@ -10,6 +11,7 @@ interface formData {
 export default function AccountSettings({setAccountSettings}:{setAccountSettings:React.Dispatch<React.SetStateAction<boolean>>}) {
     const InitialData = {name:"",surname:"",email:""}
     const state = useAppSelector(state=>state.userSlice)
+    const dispatch = useAppDispatch()
     const [formData,setFormData] = useState<formData>(InitialData)
     const [password,setPassword] = useState<formData>({passwordOne:"",passwordTwo:""})
     const [alert,setAlert] = useState("")
@@ -20,11 +22,24 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
     const submitDataChange = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if(state.name === formData.name && state.surname === formData.surname && state.email === formData.email) return
-        console.log("first");
         axios.patch(`${URL}/handleUser/updateUserData`,{...formData,_id:state._id})
+        dispatch(changeUserData({...state,...formData}))
+    }
+    const submitPasswordChange = (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if(password.passwordOne === state.password){
+            axios.patch(`${URL}/handleUser/updateUserData`,{password:password.passwordOne,_id:state._id})
+            dispatch(changeUserData({...state,password:password.passwordOne}))
+            setPassword({passwordOne:"",passwordTwo:""})
+        }else {
+            setAlert("Wrong old password!")
+        }
     }
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData,[e.target.name]:e.target.value})
+    }
+    const handlePasswordChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setPassword({...password,[e.target.name]:e.target.value})
     }
     return (
         <section className="accountSettingsContainer">
@@ -43,11 +58,11 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                     onChange={handleChange} name="email" required/>
                     <input type="submit" value="Save"/>
                 </form>
-                <form>
+                <form onSubmit={submitPasswordChange}>
                     <input type="password" placeholder="Old Password" value={password.passwordOne}
-                    onChange={handleChange} name="passwordOne" minLength={8} maxLength={20} required/>
+                    onChange={handlePasswordChange} name="passwordOne" minLength={8} maxLength={20} required/>
                     <input type="password" placeholder="New Password" value={password.passwordTwo}
-                    onChange={handleChange} name="passwordTwo" minLength={8} maxLength={20} required/>
+                    onChange={handlePasswordChange} name="passwordTwo" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Change Password"/>
                 </form>
             </div>
