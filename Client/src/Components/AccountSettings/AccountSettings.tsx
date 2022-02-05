@@ -6,31 +6,51 @@ import {changeUserData} from "../../App/Reducers/userData"
 import {URL} from "../../databaseUrl"
 
 interface formData {
-    [key:string]:string
+    name:string,
+    surname:string,
+    email:string,
+    passwordEmail:string,
+    passwordOld:string,
+    passwordNew: string
 }
 export default function AccountSettings({setAccountSettings}:{setAccountSettings:React.Dispatch<React.SetStateAction<boolean>>}) {
-    const InitialData = {name:"",surname:"",email:""}
     const state = useAppSelector(state=>state.userSlice)
     const dispatch = useAppDispatch()
-    const [formData,setFormData] = useState<formData>(InitialData)
-    const [password,setPassword] = useState<formData>({passwordOne:"",passwordTwo:""})
+    const [formData,setFormData] = useState<formData>({name:"",surname:"",email:"",passwordEmail:"",passwordOld:"",passwordNew:""})
     const [alert,setAlert] = useState("")
 
     useEffect(()=>{
-        setFormData({name:state.name,surname:state.surname,email:state.email})
+        setFormData({...formData,name:state.name,surname:state.surname,email:state.email})
     },[])
-    const submitDataChange = (e:React.FormEvent<HTMLFormElement>) => {
+    const submitNameSurnameChange = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if(state.name === formData.name && state.surname === formData.surname && state.email === formData.email) return
         axios.patch(`${URL}/handleUser/updateUserData`,{...formData,_id:state._id})
-        dispatch(changeUserData({...state,...formData}))
+        dispatch(changeUserData({...state,name:formData.name,surname:formData.surname}))
+    }
+    const submitEmailChange = (e:React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if(formData.email === state.email) return
+        if(formData.passwordEmail === state.password){
+            axios.post(`${URL}/handleUser`,{_id:state._id,email:formData.email,changeEmail:true})
+            .then(res=>{
+                if(res.data === "Success"){
+                    dispatch(changeUserData({...state,email:formData.email}))
+                    setFormData({...formData,passwordEmail:""})
+                }else {
+                    setAlert(res.data)
+                }
+            })
+        }else {
+            setAlert("Wrong password!")
+        }
     }
     const submitPasswordChange = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if(password.passwordOne === state.password){
-            axios.patch(`${URL}/handleUser/updateUserData`,{password:password.passwordOne,_id:state._id})
-            dispatch(changeUserData({...state,password:password.passwordOne}))
-            setPassword({passwordOne:"",passwordTwo:""})
+        if(formData.passwordOld === state.password){
+            axios.patch(`${URL}/handleUser/updateUserData`,{password:formData.passwordNew,_id:state._id})
+            dispatch(changeUserData({...state,password:formData.passwordNew}))
+            setFormData({...formData,passwordOld:"",passwordNew:""})
         }else {
             setAlert("Wrong old password!")
         }
@@ -38,31 +58,37 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData,[e.target.name]:e.target.value})
     }
-    const handlePasswordChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-        setPassword({...password,[e.target.name]:e.target.value})
-    }
     return (
         <section className="accountSettingsContainer">
             <div className="accountSettings">
                 <button className="closeSettings" onClick={()=>setAccountSettings(false)}><img src="/Images/delete.svg"/></button>
                 <h1>Account Settings</h1>
+                <hr />
                 <p className="simpleAlert">{alert}</p>
-                <form onSubmit={submitDataChange}>
+                <h2>Name & Surname</h2>
+                <form onSubmit={submitNameSurnameChange}>
                     <div>
                         <input type="text" placeholder="Name" value={formData.name}
                         onChange={handleChange} name="name" required/>
                         <input type="text" placeholder="Surname" value={formData.surname}
                         onChange={handleChange} name="surname" required/>
                     </div>
-                    <input type="email" placeholder="E-mail" value={formData.email}
-                    onChange={handleChange} name="email" required/>
                     <input type="submit" value="Save"/>
                 </form>
+                <h2>Email</h2>
+                <form onSubmit={submitEmailChange}>
+                    <input type="email" placeholder="E-mail" value={formData.email}
+                    onChange={handleChange} name="email" required/>
+                    <input type="password" placeholder="Password" value={formData.passwordEmail}
+                    onChange={handleChange} name="passwordEmail" minLength={8} maxLength={20} required/>
+                    <input type="submit" value="Change Email" />
+                </form>
+                <h2>Password</h2>
                 <form onSubmit={submitPasswordChange}>
-                    <input type="password" placeholder="Old Password" value={password.passwordOne}
-                    onChange={handlePasswordChange} name="passwordOne" minLength={8} maxLength={20} required/>
-                    <input type="password" placeholder="New Password" value={password.passwordTwo}
-                    onChange={handlePasswordChange} name="passwordTwo" minLength={8} maxLength={20} required/>
+                    <input type="password" placeholder="Old Password" value={formData.passwordOld}
+                    onChange={handleChange} name="passwordOld" minLength={8} maxLength={20} required/>
+                    <input type="password" placeholder="New Password" value={formData.passwordNew}
+                    onChange={handleChange} name="passwordNew" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Change Password"/>
                 </form>
             </div>

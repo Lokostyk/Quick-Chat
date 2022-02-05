@@ -11,7 +11,7 @@ router.post("/login",async (req,res)=>{
         res.send(err)
     }
 })
-
+//Creating account & changing email
 router.post("/",async (req,res)=>{
     const userData = await userModel.findOne({email:req.body.email})
     //Checking if user already exists
@@ -21,13 +21,17 @@ router.post("/",async (req,res)=>{
         const newUser = new userModel(req.body)
         try{
             res.send("Success")
-            newUser.save()
+            if(req.body.changeEmail){
+                await userModel.updateOne({_id:req.body._id},{email:req.body.email})
+            }else {
+                newUser.save()
+            }
         }catch (err){
             console.log(err)
         }
     }
 })
-
+//Updating user name/surname
 router.patch("/updateUserData",async (req,res)=>{
     if(req.body.name){
         await userModel.updateOne({_id:req.body._id},{name:req.body.name,surname:req.body.surname,email:req.body.email})

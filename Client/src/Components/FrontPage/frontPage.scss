@@ -29,8 +29,9 @@
     }
   }
   .backgroundImage {
-    height: 75%;
+    width: 75%;
     animation: flying 1.8s infinite linear;
+    animation-delay: 1s;
   }
   @keyframes flying {
     0% {
