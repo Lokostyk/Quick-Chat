@@ -4,11 +4,11 @@
   display: grid;
   grid-template-rows: auto 1fr 1fr auto;
   border-right: 2px solid $third;
-  .searchConatiner {
+  .searchBox {
     background-color: $third;
     border-bottom: 1px solid $main;
   }
-  .search {
+  .searchPreview {
     margin: 0.5rem;
     padding: 0.2rem 0.1rem;
     padding-inline-start: 0.4rem;

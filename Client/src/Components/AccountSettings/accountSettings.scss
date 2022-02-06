@@ -1,16 +1,5 @@
 @import "../../mainColors";
-.accountSettingsContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-  z-index: 1;
+.absoluteContainer {
   .accountSettings {
     padding: 2rem;
     position: relative;
@@ -20,21 +9,6 @@
     background-color: $main;
     color: $third;
     border-radius: 15px;
-    .closeSettings {
-      padding: 0.3rem;
-      display: flex;
-      align-items: center;
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      border: none;
-      cursor: pointer;
-      background-color: #fd6961;
-      border-radius: 50%;
-      img {
-        margin-left: 1px;
-      }
-    }
     h1 {
       font-size: 2rem;
     }

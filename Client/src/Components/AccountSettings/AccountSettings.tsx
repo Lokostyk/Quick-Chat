@@ -59,9 +59,9 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
         setFormData({...formData,[e.target.name]:e.target.value})
     }
     return (
-        <section className="accountSettingsContainer">
+        <section className="absoluteContainer">
             <div className="accountSettings">
-                <button className="closeSettings" onClick={()=>setAccountSettings(false)}><img src="/Images/delete.svg"/></button>
+                <button className="closeBtn" onClick={()=>setAccountSettings(false)}><img src="/Images/delete.svg"/></button>
                 <h1>Account Settings</h1>
                 <hr />
                 <p className="simpleAlert">{alert}</p>

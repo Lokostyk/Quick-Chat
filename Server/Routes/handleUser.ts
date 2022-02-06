@@ -11,6 +11,9 @@ router.post("/login",async (req,res)=>{
         res.send(err)
     }
 })
+//Getting single users/groups
+router.post("/getChats",(req,res)=>{
+})
 //Creating account & changing email
 router.post("/",async (req,res)=>{
     const userData = await userModel.findOne({email:req.body.email})

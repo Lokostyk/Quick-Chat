@@ -2,12 +2,14 @@ import "./leftBar.scss"
 import { useState } from "react"
 import { useAppSelector } from "../../App/hooks"
 import AccountSettings from "../AccountSettings/AccountSettings"
+import Search from "../Search/Search"
 
 export default function LeftBar() {
   const state = useAppSelector(state=>state.userSlice)
   const [settingsContainer,setSettingsContainer] = useState<HTMLDivElement | null>(null)
   const [accountSettings,setAccountSettings] = useState(false)
-
+  const [search,setSearch] = useState(false)
+  
   const windowClick = () => {
       settingsContainer?.classList.remove("openSettings")
       window.removeEventListener("click",windowClick)
@@ -53,9 +55,10 @@ export default function LeftBar() {
   }
   return (
     <div className="leftBarContainer">
-        <div className="searchConatiner">
-          <input className="search" placeholder="Search single/group chat..."/>
+        <div className="searchBox">
+          <input className="searchPreview" placeholder="Search single/group chat..." onFocus={()=>setSearch(true)}/>
         </div>
+        {search?<Search setSearch={setSearch}/>:""}
         <div className="chatList">
           <h2>Single Chats</h2>
           <button className="chatElement">
