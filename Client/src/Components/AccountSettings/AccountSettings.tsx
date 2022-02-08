@@ -55,6 +55,14 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
             setAlert("Wrong old password!")
         }
     }
+    const handleProfilePictureChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files === null || e.target.files[0] === undefined) return
+        const data = new FormData()
+        data.append("file",e.target.files[0])
+        data.append("name","avatar")
+        axios.patch(`${URL}/handleUser/updateUserData`,data,
+        {headers: {"Content-Type": "multipart/form-data"}})
+    }
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData,[e.target.name]:e.target.value})
     }
@@ -65,6 +73,10 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                 <h1>Account Settings</h1>
                 <hr />
                 <p className="simpleAlert">{alert}</p>
+                <label className="profilePicture">
+                    <input type="file" onChange={handleProfilePictureChange} name="avatar" accept="image/*"/>
+                    <img src="" alt="profile picture" />
+                </label>
                 <h2>Name & Surname</h2>
                 <form onSubmit={submitNameSurnameChange}>
                     <div>

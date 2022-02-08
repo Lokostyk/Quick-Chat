@@ -1,6 +1,17 @@
 export {}
 const router = require("express").Router() 
 const userModel = require("../Models/userModel")
+const cloudinary = require("cloudinary").v2
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
+const multer = require("multer")
+
+const storage = new CloudinaryStorage({
+    cloudinary:cloudinary,
+    params: {
+        folder: "QuickChat"
+    }
+})
+const upload = multer({storage:storage})
 
 router.post("/login",async (req,res)=>{
     const userData = await userModel.findOne(req.body)
@@ -34,13 +45,15 @@ router.post("/",async (req,res)=>{
         }
     }
 })
-//Updating user name/surname
-router.patch("/updateUserData",async (req,res)=>{
+router.patch("/updateUserData",upload.single("data"),async (req,res)=>{
+    console.log(req.file);
     if(req.body.name){
         await userModel.updateOne({_id:req.body._id},{name:req.body.name,surname:req.body.surname,email:req.body.email})
         .catch(err=>console.log(err))
-    }else {
+    }else if(req.body.password){
         await userModel.updateOne({_id:req.body._id},{password:req.body.password})
+    }else if(req.body.img){
+        console.log(req.body.img);
     }
 })
 

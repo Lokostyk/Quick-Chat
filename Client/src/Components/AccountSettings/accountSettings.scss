@@ -17,6 +17,15 @@
       width: 80%;
       border: 1px solid $third;
     }
+    .profilePicture {
+      input {
+        display: none;
+      }
+      img {
+        width: 300px;
+        height: 300px;
+      }
+    }
     form {
       margin-top: 0.4rem;
       display: flex;

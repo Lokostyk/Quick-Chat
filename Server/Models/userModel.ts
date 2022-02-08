@@ -17,6 +17,14 @@ const userSchema = new moongose.Schema({
     password: {
         type: String,
         required: true
+    },
+    imgSmall: {
+        type:String,
+        require:true
+    },
+    imgBig: {
+        type:String,
+        require:true
     }
 },{collection:"UserData"})
 

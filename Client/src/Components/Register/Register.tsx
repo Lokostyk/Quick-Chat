@@ -16,7 +16,7 @@ export default function Register() {
         e.preventDefault()
         if(formData.passwordOne === formData.passwordTwo){
             const finalUserData = {name:formData.name,surname:formData.surname,
-            email:formData.email,password:formData.passwordOne}
+            email:formData.email,password:formData.passwordOne,imgSmall:"",imgBig:""}
 
             axios
             .post(`${URL}/handleUser`,finalUserData)

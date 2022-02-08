@@ -7,6 +7,8 @@ export interface UserData {
     surname:string,
     email:string,
     password: string,
+    imgSmall:string,
+    imgBig:string
 }
 
 const initialState:UserData = {
@@ -15,6 +17,8 @@ const initialState:UserData = {
     surname:"",
     email:"",
     password: "",
+    imgSmall:"",
+    imgBig:""
 }
 
 const userSlice = createSlice({
