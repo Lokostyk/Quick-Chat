@@ -58,10 +58,13 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
     const handleProfilePictureChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.files === null || e.target.files[0] === undefined) return
         const data = new FormData()
-        data.append("file",e.target.files[0])
-        data.append("name","avatar")
+        data.append("avatar",e.target.files[0])
+        data.append("_id",state._id)
         axios.patch(`${URL}/handleUser/updateUserData`,data,
         {headers: {"Content-Type": "multipart/form-data"}})
+        .then(res=>{
+            dispatch(changeUserData({...state,...res.data}))
+        })
     }
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         setFormData({...formData,[e.target.name]:e.target.value})
@@ -74,8 +77,9 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                 <hr />
                 <p className="simpleAlert">{alert}</p>
                 <label className="profilePicture">
+                    <img className="hoverImg" src="/Images/edit_round.svg" alt="Edit" />
                     <input type="file" onChange={handleProfilePictureChange} name="avatar" accept="image/*"/>
-                    <img src="" alt="profile picture" />
+                    <img className="picture" src={state.imgBig === ""?"/Images/default.jpg":state.imgBig} alt="profile picture" />
                 </label>
                 <h2>Name & Surname</h2>
                 <form onSubmit={submitNameSurnameChange}>

@@ -69,7 +69,7 @@ export default function LeftBar() {
           <h2>Group Chats</h2>
         </div>
         <div className="bottomInfo">
-          <img src="/Images/eye.jpg" />
+          <img src={state.imgSmall === ""?"/Images/default.jpg":state.imgSmall}/>
           <h2>{`${state.name} ${state.surname}`}</h2>
           <div className="settingsContainer" onClick={(e)=>e.stopPropagation()}>
               <div className="settings" ref={(e)=>setSettingsContainer(e)}>

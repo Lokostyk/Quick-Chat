@@ -11,7 +11,7 @@ const storage = new CloudinaryStorage({
         folder: "QuickChat"
     }
 })
-const upload = multer({storage:storage})
+const upload = multer({storage})
 
 router.post("/login",async (req,res)=>{
     const userData = await userModel.findOne(req.body)
@@ -45,15 +45,18 @@ router.post("/",async (req,res)=>{
         }
     }
 })
-router.patch("/updateUserData",upload.single("data"),async (req,res)=>{
-    console.log(req.file);
+router.patch("/updateUserData",upload.single("avatar"),async (req,res)=>{
     if(req.body.name){
         await userModel.updateOne({_id:req.body._id},{name:req.body.name,surname:req.body.surname,email:req.body.email})
         .catch(err=>console.log(err))
     }else if(req.body.password){
         await userModel.updateOne({_id:req.body._id},{password:req.body.password})
-    }else if(req.body.img){
-        console.log(req.body.img);
+    }else if(req.file){
+        const imgPath = req.file.path 
+        const imgSmall = imgPath.slice(0,imgPath.indexOf("upload/")+7) + "w_auto,h_90,c_scale,q_90/" + imgPath.slice(imgPath.indexOf("upload/")+7)
+        const imgBig = imgPath.slice(0,imgPath.indexOf("upload/")+7) + "w_auto,h_350,c_scale,q_90/" + imgPath.slice(imgPath.indexOf("upload/")+7)
+        await userModel.updateOne({_id:req.body._id},{imgSmall,imgBig})
+        res.send({imgSmall,imgBig})
     }
 })
 
