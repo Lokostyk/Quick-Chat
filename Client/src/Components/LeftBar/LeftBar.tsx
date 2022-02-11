@@ -58,7 +58,7 @@ export default function LeftBar() {
         <div className="searchBox">
           <input className="searchPreview" placeholder="Search single/group chat..." onFocus={()=>setSearch(true)}/>
         </div>
-        {search?<Search setSearch={setSearch}/>:""}
+        {search?<Search setSearch={setSearch} currentUserId={state._id}/>:""}
         <div className="chatList">
           <h2>Single Chats</h2>
           <button className="chatElement">

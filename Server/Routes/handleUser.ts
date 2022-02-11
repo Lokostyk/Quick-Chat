@@ -23,7 +23,13 @@ router.post("/login",async (req,res)=>{
     }
 })
 //Getting single users/groups
-router.post("/getChats",(req,res)=>{
+router.post("/getUsers",async (req,res)=>{
+    const users = await userModel.find({},{password:0,email:0,imgBig:0})
+    try{
+        res.send(users)
+    }catch (err){
+        console.log(err)
+    }
 })
 //Creating account & changing email
 router.post("/",async (req,res)=>{
