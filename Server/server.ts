@@ -5,7 +5,8 @@ const moongose = require("mongoose")
 const express = require("express")
 const app = express()
 
-const registerUserRouter = require("./Routes/handleUser")
+const usersRouter = require("./Routes/handleUser")
+const chatRouter = require("./Routes/handleChat")
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -16,7 +17,8 @@ cloudinary.config({
 app.use(cors())
 app.use(express.json())
 
-app.use("/handleUser",registerUserRouter)
+app.use("/handleUser",usersRouter)
+app.use("/handleChat",chatRouter)
 
 moongose.connect(process.env.MONGO_URI,()=>console.log("Connected!"))
 

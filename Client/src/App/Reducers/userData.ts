@@ -8,7 +8,8 @@ export interface UserData {
     email:string,
     password: string,
     imgSmall:string,
-    imgBig:string
+    imgBig:string,
+    joinedChats: string[]
 }
 
 const initialState:UserData = {
@@ -18,7 +19,8 @@ const initialState:UserData = {
     email:"",
     password: "",
     imgSmall:"",
-    imgBig:""
+    imgBig:"",
+    joinedChats: []
 }
 
 const userSlice = createSlice({

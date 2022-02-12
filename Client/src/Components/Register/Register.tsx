@@ -12,11 +12,11 @@ export default function Register() {
     const [formData,setFormData] = useState<FormData>(InitialData)
     const [alert,setAlert] = useState("")
 
-    const handleLogin = useCallback((e:React.FormEvent)=>{
+    const handleRegistration = useCallback((e:React.FormEvent)=>{
         e.preventDefault()
         if(formData.passwordOne === formData.passwordTwo){
             const finalUserData = {name:formData.name,surname:formData.surname,
-            email:formData.email,password:formData.passwordOne,imgSmall:"",imgBig:""}
+            email:formData.email,password:formData.passwordOne,imgSmall:"",imgBig:"",joinedChats:[]}
 
             axios
             .post(`${URL}/handleUser`,finalUserData)
@@ -39,7 +39,7 @@ export default function Register() {
         <section className="registerContainer">
             <div className="formContainer">
                 <Logo />
-                <form onSubmit={(e)=>handleLogin(e)}>
+                <form onSubmit={(e)=>handleRegistration(e)}>
                     <p className="simpleAlert">{alert}</p>
                     <div>
                         <input type="text" placeholder="Name" value={formData.name}

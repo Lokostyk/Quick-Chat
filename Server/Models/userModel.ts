@@ -20,11 +20,13 @@ const userSchema = new moongose.Schema({
     },
     imgSmall: {
         type:String,
-        require:true
     },
     imgBig: {
         type:String,
-        require:true
+    },
+    joinedChats: {
+        type: Array,
+        required: true
     }
 },{collection:"UserData"})
 

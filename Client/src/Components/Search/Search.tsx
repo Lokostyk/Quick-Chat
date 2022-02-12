@@ -2,27 +2,37 @@ import "./search.scss"
 import axios from "axios"
 import { useEffect, useState, useRef } from "react"
 import { URL } from "../../databaseUrl"
+import { useAppDispatch, useAppSelector } from "../../App/hooks"
+import {changeUserData} from "../../App/Reducers/userData"
 
-interface Users {
+interface User {
   _id:string,
   name:string,
   surname:string,
   imgSmall:string
 }
-export default function Search({setSearch,currentUserId}:{setSearch:React.Dispatch<React.SetStateAction<boolean>>,currentUserId:string}) {
+export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetStateAction<boolean>>}) {
+  const state = useAppSelector(state=>state.userSlice)
+  const dispatch = useAppDispatch()
   let inputRef = useRef<HTMLInputElement>(null)
-  const [users,setUsers] = useState<Users[]>([])
-  const [searchInput,setSearchInput] = useState("")  
+  const [users,setUsers] = useState<User[]>([])
+  const [searchInput,setSearchInput] = useState("") 
 
   useEffect(()=>{
     inputRef.current?.focus()
     axios.post(`${URL}/handleUser/getUsers`)
     .then(res=>{
-      const usersData = res.data.filter((item:Users)=>item._id !== currentUserId)
+      const usersData = res.data.filter((item:User)=>item._id !== state._id && !state.joinedChats.includes(item._id))
       setUsers(usersData)
     })
     .catch(err=>console.log(err))
   },[])
+  const joinSingleConverastion = (otherUserId:string) => {
+    axios.post(`${URL}/handleChat/createSingle`,{userOneId:state._id,userTwoId:otherUserId})
+    const refreshedUsersList = users.filter(item=>item._id !== otherUserId)
+    setUsers(refreshedUsersList)
+    dispatch(changeUserData({...state,joinedChats:[...state.joinedChats,otherUserId]}))
+  }
   const handleSerachChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value)
   }
@@ -40,7 +50,7 @@ export default function Search({setSearch,currentUserId}:{setSearch:React.Dispat
                       <div key={item._id}>
                         <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
                         <p>{item.name} {item.surname}</p>
-                        <button>ADD</button>
+                        <button onClick={()=>joinSingleConverastion(item._id)}>ADD</button>
                       </div>
                       )
                   })}
