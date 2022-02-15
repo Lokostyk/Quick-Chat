@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react"
 import { URL } from "../../databaseUrl"
 import { useAppDispatch, useAppSelector } from "../../App/hooks"
 import {changeUserData} from "../../App/Reducers/userData"
+import FirstPlanWindow from "../HigherOrderComponents/firstPlanWindow"
 
 interface User {
   _id:string,
@@ -15,6 +16,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
   const state = useAppSelector(state=>state.userSlice)
   const dispatch = useAppDispatch()
   let inputRef = useRef<HTMLInputElement>(null)
+  const [initialUsers,setInitialUsers] = useState<User[]>([])
   const [users,setUsers] = useState<User[]>([])
   const [searchInput,setSearchInput] = useState("") 
 
@@ -23,6 +25,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
     axios.post(`${URL}/handleUser/getUsers`)
     .then(res=>{
       const usersData = res.data.filter((item:User)=>item._id !== state._id && !state.joinedChats.includes(item._id))
+      setInitialUsers(usersData)
       setUsers(usersData)
     })
     .catch(err=>console.log(err))
@@ -35,30 +38,39 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
   }
   const handleSerachChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value)
+        if(e.target.value !== ""){
+            const searchedUsers:User[] = []
+            const re = new RegExp(e.target.value,"i")
+            users.forEach((user)=>{
+                if(re.test(user.name + " " + user.surname) || re.test(user._id)){
+                    searchedUsers.push(user)
+                }
+            })
+            setUsers(searchedUsers)
+        }else {
+            setUsers(initialUsers)
+        }
   }
   return (
-        <section className="absoluteContainer">
-            <div className="searchContainer">
-                <button className="closeBtn" onClick={()=>setSearch(false)}><img src="/Images/delete.svg"/></button>
-                <h1>Search for your friends and groups!</h1>
-                <input className="search" ref={inputRef} placeholder="Search by id or name..."
-                value={searchInput} onChange={handleSerachChange}/>
-                <h2>Single Chats</h2>
-                <div className="chatContainer">
-                  {users.map(item=>{
-                    return (
-                      <div key={item._id}>
-                        <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
-                        <p>{item.name} {item.surname}</p>
-                        <button onClick={()=>joinSingleConverastion(item._id)}>ADD</button>
-                      </div>
-                      )
-                  })}
-                </div>
-                <h2>Group Chats</h2>
-                <div className="chatContainer">
-                  <div></div>
-                </div>
+        <FirstPlanWindow setShowWindow={setSearch}>
+            <h1>Search for your friends and groups!</h1>
+            <input className="search" ref={inputRef} placeholder="Search by id or name..."
+            value={searchInput} onChange={handleSerachChange}/>
+            <h2>Single Chats</h2>
+            <div className="chatContainer">
+              {users.map(item=>{
+                return (
+                  <div key={item._id}>
+                    <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
+                    <p>{item.name} {item.surname}</p>
+                    <button onClick={()=>joinSingleConverastion(item._id)}>ADD</button>
+                  </div>
+                  )
+              })}
             </div>
-  </section>)
+            <h2>Group Chats</h2>
+            <div className="chatContainer">
+              <div></div>
+            </div>
+  </FirstPlanWindow>)
 }

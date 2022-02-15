@@ -3,6 +3,8 @@ import { useState } from "react"
 import { useAppSelector } from "../../App/hooks"
 import AccountSettings from "../AccountSettings/AccountSettings"
 import Search from "../Search/Search"
+import axios from "axios"
+import { URL } from "../../databaseUrl"
 
 export default function LeftBar() {
   const state = useAppSelector(state=>state.userSlice)
@@ -52,6 +54,9 @@ export default function LeftBar() {
         rootStyle.setProperty("--third-color","#daeef7")
         break;
     }
+  }
+  const createGroupChat = () => {
+    axios.post(`${URL}/handleChat/createSingle`,{groupName:""})
   }
   return (
     <div className="leftBarContainer">

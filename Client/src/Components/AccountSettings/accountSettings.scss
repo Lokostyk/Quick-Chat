@@ -1,93 +1,83 @@
 @import "../../mainColors";
-.absoluteContainer {
-  .accountSettings {
-    padding: 2rem;
+.componentsContainer {
+  h1 {
+    font-size: 2rem;
+  }
+  hr {
+    margin: 0.2rem 0;
+    width: 80%;
+    border: 1px solid $third;
+  }
+  .profilePicture {
     position: relative;
+    border-radius: 50%;
+    cursor: pointer;
+    &:before {
+      content: "";
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    &:hover {
+      .hoverImg {
+        display: block;
+      }
+      &:before {
+        display: block;
+      }
+    }
+    input {
+      display: none;
+    }
+    .hoverImg {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 75px;
+    }
+    .picture {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+  form {
+    margin-top: 0.4rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: $main;
-    color: $third;
-    border-radius: 15px;
-    h1 {
-      font-size: 2rem;
-    }
-    hr {
-      margin: 0.2rem 0;
-      width: 80%;
-      border: 1px solid $third;
-    }
-    .profilePicture {
-      position: relative;
-      border-radius: 50%;
-      cursor: pointer;
-      &:before {
-        content: "";
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 50%;
-        z-index: 0;
-      }
-      &:hover {
-        .hoverImg {
-          display: block;
-        }
-        &:before {
-          display: block;
-        }
-      }
+    div {
       input {
-        display: none;
-      }
-      .hoverImg {
-        display: none;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        height: 75px;
-      }
-      .picture {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
+        margin: 0 0.5%;
+        width: 48%;
       }
     }
-    form {
-      margin-top: 0.4rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      div {
-        input {
-          margin: 0 0.5%;
-          width: 48%;
-        }
-      }
-      input:not([type="submit"]) {
-        padding: 0.1rem 0.2rem;
-        margin: 0.1rem;
-        font-size: 1.1rem;
-      }
-      input[type="submit"] {
-        padding: 0.2rem 1rem;
-        margin: 0.3rem 0;
-        font-size: 1.1rem;
-        border: 1px solid $third;
-        background-color: $main;
-        color: $third;
-        transition: 0.3s all;
-        &:hover {
-          border: 1px solid $main;
-          background-color: $third;
-          color: $main;
-        }
+    input:not([type="submit"]) {
+      padding: 0.1rem 0.2rem;
+      margin: 0.1rem;
+      font-size: 1.1rem;
+    }
+    input[type="submit"] {
+      padding: 0.2rem 1rem;
+      margin: 0.3rem 0;
+      font-size: 1.1rem;
+      border: 1px solid $third;
+      background-color: $main;
+      color: $third;
+      transition: 0.3s all;
+      &:hover {
+        border: 1px solid $main;
+        background-color: $third;
+        color: $main;
       }
     }
   }

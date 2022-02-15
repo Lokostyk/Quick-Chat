@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useAppSelector,useAppDispatch } from "../../App/hooks"
 import {changeUserData} from "../../App/Reducers/userData"
 import {URL} from "../../databaseUrl"
+import FirstPlanWindow from "../HigherOrderComponents/firstPlanWindow"
 
 interface formData {
     name:string,
@@ -70,9 +71,7 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
         setFormData({...formData,[e.target.name]:e.target.value})
     }
     return (
-        <section className="absoluteContainer">
-            <div className="accountSettings">
-                <button className="closeBtn" onClick={()=>setAccountSettings(false)}><img src="/Images/delete.svg"/></button>
+        <FirstPlanWindow setShowWindow={setAccountSettings}>
                 <h1>Account Settings</h1>
                 <hr />
                 <p className="simpleAlert">{alert}</p>
@@ -107,7 +106,6 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                     onChange={handleChange} name="passwordNew" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Change Password"/>
                 </form>
-            </div>
-        </section>
+        </FirstPlanWindow>
     )
 }
