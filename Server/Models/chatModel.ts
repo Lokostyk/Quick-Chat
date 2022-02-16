@@ -9,6 +9,12 @@ const ChatShema = new moongose.Schema({
     messages: {
         type:Array,
         required:true
+    },
+    groupName: {
+        type: String
+    },
+    isPrivate: {
+        type: Boolean
     }
 },{collection:"Chats"})
 

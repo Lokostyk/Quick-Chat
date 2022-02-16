@@ -1,17 +1,32 @@
 import "./leftBar.scss"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAppSelector } from "../../App/hooks"
 import AccountSettings from "../AccountSettings/AccountSettings"
 import Search from "../Search/Search"
 import axios from "axios"
 import { URL } from "../../databaseUrl"
+import CreateGroup from '../CreateGroup/CreateGroup'
 
+interface fetchedUser {
+  _id:string,
+  name:string,
+  surname:string,
+  imgSmall:string
+}
 export default function LeftBar() {
   const state = useAppSelector(state=>state.userSlice)
   const [settingsContainer,setSettingsContainer] = useState<HTMLDivElement | null>(null)
   const [accountSettings,setAccountSettings] = useState(false)
   const [search,setSearch] = useState(false)
-  
+  const [createGroup,setCreateGroup] = useState(false)
+  const [singleConversations,setSingleConversations] = useState<fetchedUser[]>([])
+
+  useEffect(()=>{
+    axios.post(`${URL}/handleUser/getUsers`,{joinedChats:state.joinedChats})
+    .then(res=>{
+      setSingleConversations(res.data)
+    })
+  },[])
   const windowClick = () => {
       settingsContainer?.classList.remove("openSettings")
       window.removeEventListener("click",windowClick)
@@ -55,9 +70,6 @@ export default function LeftBar() {
         break;
     }
   }
-  const createGroupChat = () => {
-    axios.post(`${URL}/handleChat/createSingle`,{groupName:""})
-  }
   return (
     <div className="leftBarContainer">
         <div className="searchBox">
@@ -66,13 +78,26 @@ export default function LeftBar() {
         {search?<Search setSearch={setSearch}/>:""}
         <div className="chatList">
           <h2>Single Chats</h2>
-          <button className="chatElement">
-            #Grupa giga czadów
-          </button>
+          {singleConversations.map((item:fetchedUser)=>{
+            return (<button className="chatElement">
+              <img src={`${item.imgSmall===""?"./Images/default.jpg":item.imgSmall}`} />
+              <p>{item.name} {item.surname}</p>
+            </button>)
+          })}
         </div>
         <div className="chatList">
-          <h2>Group Chats</h2>
+            <h2>Group Chats
+              <button onClick={()=>setCreateGroup(true)}>
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g id="Group 1">
+                    <path className="rec" id="Rectangle 2" d="M10 5C10 3.34315 11.3431 2 13 2V2C14.6569 2 16 3.34315 16 5V21C16 22.6569 14.6569 24 13 24V24C11.3431 24 10 22.6569 10 21V5Z" fill="#C4C4C4"/>
+                    <rect className="rec" id="Rectangle 3" x="2" y="16" width="6" height="22" rx="3" transform="rotate(-90 2 16)" fill="#C4C4C4"/>
+                  </g>
+                  </svg>
+              </button>
+            </h2>
         </div>
+        {createGroup?<CreateGroup setCreateGroup={setCreateGroup} />:""}
         <div className="bottomInfo">
           <img src={state.imgSmall === ""?"/Images/default.jpg":state.imgSmall}/>
           <h2>{`${state.name} ${state.surname}`}</h2>

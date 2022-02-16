@@ -24,9 +24,15 @@ router.post("/login",async (req,res)=>{
 })
 //Getting single users/groups
 router.post("/getUsers",async (req,res)=>{
-    const users = await userModel.find({},{password:0,email:0,imgBig:0})
     try{
-        res.send(users)
+        if(req.body.joinedChats){
+            const users = await userModel.find({_id:{$in:req.body.joinedChats}},{password:0,email:0,imgBig:0,joinedChats:0})
+            console.log(users)
+            res.send(users)
+        }else {
+            const users = await userModel.find({},{password:0,email:0,imgBig:0,joinedChats:0})
+            res.send(users)
+        }
     }catch (err){
         console.log(err)
     }
