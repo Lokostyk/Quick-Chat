@@ -12,12 +12,17 @@ interface User {
   surname:string,
   imgSmall:string
 }
+interface Group {
+  _id:string,
+  groupName:string,
+  users: string[]
+}
 export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetStateAction<boolean>>}) {
   const state = useAppSelector(state=>state.userSlice)
   const dispatch = useAppDispatch()
   let inputRef = useRef<HTMLInputElement>(null)
-  const [initialUsers,setInitialUsers] = useState<User[]>([])
-  const [users,setUsers] = useState<User[]>([])
+  const [users,setUsers] = useState<{initial:User[],afterSearch:User[]}>({initial:[],afterSearch:[]})
+  const [groups,setGroups] = useState<{initial:Group[],afterSearch:Group[]}>({initial:[],afterSearch:[]})
   const [searchInput,setSearchInput] = useState("") 
 
   useEffect(()=>{
@@ -25,30 +30,48 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
     axios.post(`${URL}/handleUser/getUsers`)
     .then(res=>{
       const usersData = res.data.filter((item:User)=>item._id !== state._id && !state.joinedChats.includes(item._id))
-      setInitialUsers(usersData)
-      setUsers(usersData)
+      setUsers({initial:usersData,afterSearch:usersData})
     })
     .catch(err=>console.log(err))
+    axios.post(`${URL}/handleChat/getGroups`)
+    .then(res=>{
+      const groupData = res.data.filter((item:Group)=>!item.users.includes(state._id))
+      setGroups({initial:groupData,afterSearch:groupData})
+    })
   },[])
   const joinSingleConverastion = (otherUserId:string) => {
     axios.post(`${URL}/handleChat/createSingle`,{userOneId:state._id,userTwoId:otherUserId})
-    const refreshedUsersList = users.filter(item=>item._id !== otherUserId)
-    setUsers(refreshedUsersList)
+    const refreshedUsersList = users.afterSearch.filter(item=>item._id !== otherUserId)
+    setUsers({...users,afterSearch:refreshedUsersList})
     dispatch(changeUserData({...state,joinedChats:[...state.joinedChats,otherUserId]}))
+  }
+  const joinGroupConversation = (groupId:string) => {
+    axios.post(`${URL}/handleChat/joinGroup`,{groupId,userId:state._id})
+    const refreshedUsersList = groups.afterSearch.filter(item=>item._id !== groupId)
+    setGroups({...groups,afterSearch:refreshedUsersList})
+    dispatch(changeUserData({...state,joinedChats:[...state.joinedChats,groupId]}))
   }
   const handleSerachChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value)
         if(e.target.value !== ""){
             const searchedUsers:User[] = []
+            const searchedGroups:Group[] = []
             const re = new RegExp(e.target.value,"i")
-            users.forEach((user)=>{
+            users.initial.forEach((user)=>{
                 if(re.test(user.name + " " + user.surname) || re.test(user._id)){
                     searchedUsers.push(user)
                 }
             })
-            setUsers(searchedUsers)
+            groups.initial.forEach((group)=>{
+              if(re.test(group.groupName) || re.test(group._id)){
+                searchedGroups.push(group)
+              }
+            })
+            setUsers({...users,afterSearch:searchedUsers})
+            setGroups({...groups,afterSearch:searchedGroups})
         }else {
-            setUsers(initialUsers)
+            setUsers({...users,afterSearch:users.initial})
+            setGroups({...groups,afterSearch:groups.initial})
         }
   }
   return (
@@ -58,7 +81,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
             value={searchInput} onChange={handleSerachChange}/>
             <h2>Single Chats</h2>
             <div className="chatContainer">
-              {users.map(item=>{
+              {users.afterSearch.map(item=>{
                 return (
                   <div key={item._id}>
                     <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
@@ -67,10 +90,17 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
                   </div>
                   )
               })}
+              {users.afterSearch.length === 0?<h3>We ranned out of users :(</h3>:""}
             </div>
             <h2>Group Chats</h2>
             <div className="chatContainer">
-              <div></div>
+              {groups.afterSearch.map(item=>{
+                return (<div className="groupChat" key={item._id}>
+                  <p>{item.groupName}</p>
+                  <button onClick={()=>joinGroupConversation(item._id)}>ADD</button>
+                </div>)
+              })}
+              {groups.afterSearch.length === 0?<h3>We ranned out of groups :(</h3>:""}
             </div>
   </FirstPlanWindow>)
 }

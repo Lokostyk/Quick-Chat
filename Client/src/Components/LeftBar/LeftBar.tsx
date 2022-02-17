@@ -13,6 +13,11 @@ interface fetchedUser {
   surname:string,
   imgSmall:string
 }
+interface fetchedGroups {
+  _id:string,
+  groupName:string,
+  users: string[]
+}
 export default function LeftBar() {
   const state = useAppSelector(state=>state.userSlice)
   const [settingsContainer,setSettingsContainer] = useState<HTMLDivElement | null>(null)
@@ -20,11 +25,16 @@ export default function LeftBar() {
   const [search,setSearch] = useState(false)
   const [createGroup,setCreateGroup] = useState(false)
   const [singleConversations,setSingleConversations] = useState<fetchedUser[]>([])
-
+  const [groupConversations,setGroupConversations] = useState<fetchedGroups[]>([])
+  
   useEffect(()=>{
     axios.post(`${URL}/handleUser/getUsers`,{joinedChats:state.joinedChats})
     .then(res=>{
       setSingleConversations(res.data)
+    })
+    axios.post(`${URL}/handleChat/getGroups`,{joinedGroups:state.joinedChats})
+    .then(res=>{
+      setGroupConversations(res.data)
     })
   },[])
   const windowClick = () => {
@@ -73,13 +83,13 @@ export default function LeftBar() {
   return (
     <div className="leftBarContainer">
         <div className="searchBox">
-          <input className="searchPreview" placeholder="Search single/group chat..." onFocus={()=>setSearch(true)}/>
+          <input className="searchPreview" placeholder="Add single/group chat..." onFocus={()=>setSearch(true)}/>
         </div>
         {search?<Search setSearch={setSearch}/>:""}
         <div className="chatList">
           <h2>Single Chats</h2>
           {singleConversations.map((item:fetchedUser)=>{
-            return (<button className="chatElement">
+            return (<button key={item._id} className="chatElement">
               <img src={`${item.imgSmall===""?"./Images/default.jpg":item.imgSmall}`} />
               <p>{item.name} {item.surname}</p>
             </button>)
@@ -96,6 +106,11 @@ export default function LeftBar() {
                   </svg>
               </button>
             </h2>
+            {groupConversations.map(item=>{
+              return (<button key={item._id} className="chatElement">
+                <p>{item.groupName}</p>
+              </button>)
+            })}
         </div>
         {createGroup?<CreateGroup setCreateGroup={setCreateGroup} />:""}
         <div className="bottomInfo">
