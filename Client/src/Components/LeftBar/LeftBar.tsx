@@ -3,40 +3,17 @@ import { useEffect, useState } from "react"
 import { useAppSelector } from "../../App/hooks"
 import AccountSettings from "../AccountSettings/AccountSettings"
 import Search from "../Search/Search"
-import axios from "axios"
-import { URL } from "../../databaseUrl"
 import CreateGroup from '../CreateGroup/CreateGroup'
 
-interface fetchedUser {
-  _id:string,
-  name:string,
-  surname:string,
-  imgSmall:string
-}
-interface fetchedGroups {
-  _id:string,
-  groupName:string,
-  users: string[]
-}
-export default function LeftBar() {
+import { fetchedUser,fetchedGroups } from "../MainHub/MainHub"
+
+export default function LeftBar({singleConversations,groupConversations,setChosenChat}:{singleConversations:fetchedUser[],groupConversations:fetchedGroups[],setChosenChat:React.Dispatch<React.SetStateAction<{userOneId: string;userTwoId: string;}>>}) {
   const state = useAppSelector(state=>state.userSlice)
   const [settingsContainer,setSettingsContainer] = useState<HTMLDivElement | null>(null)
   const [accountSettings,setAccountSettings] = useState(false)
   const [search,setSearch] = useState(false)
   const [createGroup,setCreateGroup] = useState(false)
-  const [singleConversations,setSingleConversations] = useState<fetchedUser[]>([])
-  const [groupConversations,setGroupConversations] = useState<fetchedGroups[]>([])
-  
-  useEffect(()=>{
-    axios.post(`${URL}/handleUser/getUsers`,{joinedChats:state.joinedChats})
-    .then(res=>{
-      setSingleConversations(res.data)
-    })
-    axios.post(`${URL}/handleChat/getGroups`,{joinedGroups:state.joinedChats})
-    .then(res=>{
-      setGroupConversations(res.data)
-    })
-  },[])
+
   const windowClick = () => {
       settingsContainer?.classList.remove("openSettings")
       window.removeEventListener("click",windowClick)
@@ -53,6 +30,9 @@ export default function LeftBar() {
       window.addEventListener("click",windowClick)
       settingsContainer?.classList.add("openSettings")
     }
+  }
+  const openChat = (userOneId:string,userTwoId:string="") => {
+    setChosenChat({userOneId,userTwoId})
   }
   const handleThemeChange = (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) =>{
     const rootStyle = document.documentElement.style 
@@ -89,7 +69,7 @@ export default function LeftBar() {
         <div className="chatList">
           <h2>Single Chats</h2>
           {singleConversations.map((item:fetchedUser)=>{
-            return (<button key={item._id} className="chatElement">
+            return (<button key={item._id} className="chatElement" onClick={()=>openChat(item._id,state._id)}>
               <img src={`${item.imgSmall===""?"./Images/default.jpg":item.imgSmall}`} />
               <p>{item.name} {item.surname}</p>
             </button>)
@@ -107,7 +87,7 @@ export default function LeftBar() {
               </button>
             </h2>
             {groupConversations.map(item=>{
-              return (<button key={item._id} className="chatElement">
+              return (<button key={item._id} className="chatElement" onClick={()=>openChat(item._id)}>
                 <p>{item.groupName}</p>
               </button>)
             })}

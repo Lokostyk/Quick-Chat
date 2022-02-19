@@ -26,6 +26,7 @@ router.post("/createGroup",(req,res)=>{
         console.log(err)
     }
 })
+//Getting all groups without private in Search window
 router.post("/getGroups",async (req,res)=>{
     try {
         if(req.body.joinedGroups){
@@ -34,6 +35,21 @@ router.post("/getGroups",async (req,res)=>{
         }else {
             const newGroupList = await chatModel.find({isPrivate:false})
             res.send(newGroupList)
+        }
+    }catch (err){
+        console.log(err)
+    }
+})
+//Get chat with all messages
+router.post("/getChat",async(req,res)=>{
+    try{
+        //If userTwoId is empty it will search for group chat
+        if(req.body.userTwoId){
+            const singleChat = await chatModel.findOne({groupName:null,$set:{users:[req.body.userOneId,req.body.userTwoId]}})
+            res.send(singleChat)
+        }else {
+            const groupChat = await chatModel.findOne({_id:req.body.userOneId})
+            res.send(groupChat)
         }
     }catch (err){
         console.log(err)
