@@ -12,18 +12,19 @@ export interface fetchedUser {
   surname:string,
   imgSmall:string
 }
-export interface fetchedGroups {
+export interface fetchedChatData {
   _id:string,
-  groupName:string,
-  users: string[]
+  groupName?: string,
+  users: string[],
+  messages: string[]
 }
 function MainHub() {
   const state = useAppSelector(state=>state.userSlice)
   const [singleConversations,setSingleConversations] = useState<fetchedUser[]>([])
-  const [groupConversations,setGroupConversations] = useState<fetchedGroups[]>([])
+  const [groupConversations,setGroupConversations] = useState<fetchedChatData[]>([])
   const [chosenChat,setChosenChat] = useState({userOneId:"",userTwoId:""})
-  const [chosenChatData,setChosenChatData] = useState()
-  console.log(chosenChatData)
+  const [chosenChatData,setChosenChatData] = useState<fetchedChatData>({} as fetchedChatData)
+
   // Checking if user is logged in
   if(!state.name){
     window.location.pathname = "/"
@@ -48,7 +49,7 @@ function MainHub() {
   return (
     <section className="mainHubContainer">
       <LeftBar setChosenChat={setChosenChat} singleConversations={singleConversations} groupConversations={groupConversations}/>
-      <ChatWindow />
+      {chosenChatData._id?<ChatWindow chatData={chosenChatData}/>:""}
     </section>
   );
 }

@@ -36,6 +36,14 @@ router.post("/getUsers",async (req,res)=>{
         console.log(err)
     }
 })
+router.post("/getUserById",async (req,res)=>{
+    const userData = await userModel.findOne({_id:req.body.id},{password:0,email:0,imgBig:0,joinedChats:0})
+    try {
+        res.send(userData)
+    }catch (err){
+        console.log(err)
+    }
+})
 //Creating account & changing email
 router.post("/",async (req,res)=>{
     const userData = await userModel.findOne({email:req.body.email})

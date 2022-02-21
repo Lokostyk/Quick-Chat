@@ -5,9 +5,9 @@ import AccountSettings from "../AccountSettings/AccountSettings"
 import Search from "../Search/Search"
 import CreateGroup from '../CreateGroup/CreateGroup'
 
-import { fetchedUser,fetchedGroups } from "../MainHub/MainHub"
+import { fetchedUser,fetchedChatData } from "../MainHub/MainHub"
 
-export default function LeftBar({singleConversations,groupConversations,setChosenChat}:{singleConversations:fetchedUser[],groupConversations:fetchedGroups[],setChosenChat:React.Dispatch<React.SetStateAction<{userOneId: string;userTwoId: string;}>>}) {
+export default function LeftBar({singleConversations,groupConversations,setChosenChat}:{singleConversations:fetchedUser[],groupConversations:fetchedChatData[],setChosenChat:React.Dispatch<React.SetStateAction<{userOneId: string;userTwoId: string;}>>}) {
   const state = useAppSelector(state=>state.userSlice)
   const [settingsContainer,setSettingsContainer] = useState<HTMLDivElement | null>(null)
   const [accountSettings,setAccountSettings] = useState(false)

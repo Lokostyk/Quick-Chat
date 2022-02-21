@@ -1,0 +1,18 @@
+@import "../../mainColors";
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $third;
+  border-left: 1px solid $main;
+  img {
+    height: 35px;
+    border-radius: 50%;
+  }
+  p {
+    margin: 0.6rem 0 0.6rem 0.2rem;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: $main;
+  }
+}
