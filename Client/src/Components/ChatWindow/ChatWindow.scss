@@ -1,18 +1,120 @@
 @import "../../mainColors";
-.topBar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: $third;
-  border-left: 1px solid $main;
-  img {
-    height: 35px;
-    border-radius: 50%;
+.chatSection {
+  display: grid;
+  height: 100vh;
+  flex-direction: column;
+  grid-template-rows: auto 1fr auto;
+  .topBar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $third;
+    border-left: 1px solid $main;
+    img {
+      height: 35px;
+      border-radius: 50%;
+    }
+    p {
+      margin: 0.605rem 0 0.605rem 0.2rem;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: $main;
+    }
   }
-  p {
-    margin: 0.6rem 0 0.6rem 0.2rem;
-    font-size: 1.3rem;
-    font-weight: 500;
-    color: $main;
+  .messagesContainer {
+    padding: 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    .message {
+      margin: 0.2rem 0;
+      padding: 0 0.3rem;
+      display: flex;
+      flex-direction: column;
+      justify-items: flex-start;
+      align-self: flex-start;
+      border-left: 2px solid $third;
+      div {
+        display: flex;
+        align-items: center;
+      }
+      .imgCover {
+        position: relative;
+        background-color: $third;
+        border-radius: 50% 50% 0 0;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 99%;
+          bottom: -0.2px;
+          height: 10px;
+          width: 10px;
+          background-color: $third;
+          clip-path: polygon(
+            15% 61%,
+            23% 75%,
+            35% 86%,
+            51% 93%,
+            75% 100%,
+            0 100%,
+            0 23%,
+            8% 46%
+          );
+        }
+      }
+      img {
+        padding: 0.2rem;
+        height: 30px;
+        border-radius: 50%;
+      }
+      h4 {
+        margin: 0 0.2rem;
+        color: black;
+        letter-spacing: 0.5px;
+      }
+      p {
+        padding: 0.3rem 0.4rem;
+        background-color: $third;
+        color: $main;
+        border-radius: 15px;
+        border-top-left-radius: 0px;
+        word-break: break-all;
+        max-width: 450px;
+      }
+    }
+    .right {
+      align-self: flex-end;
+      border-left: 0px;
+      border-right: 2px solid $third;
+      .imgCover {
+        &::before {
+          left: unset;
+          right: 100%;
+          transform: rotate(-90deg);
+        }
+      }
+      div {
+        flex-direction: row-reverse;
+      }
+      p {
+        border-radius: 15px;
+        border-top-right-radius: 0;
+      }
+    }
+  }
+  .bottomBar {
+    padding: 0.595rem;
+    display: flex;
+    background-color: $third;
+    justify-content: center;
+    border-left: 1px solid $main;
+    border-top: 1px solid $main;
+    input {
+      padding: 0.2rem;
+      padding-inline-start: 0.4rem;
+      font-size: 1.2rem;
+      border-radius: 15px;
+      border: 1px solid $main;
+    }
   }
 }

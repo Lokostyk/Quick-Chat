@@ -20,7 +20,6 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    border-top: 2px solid $third;
     overflow: auto;
     h2 {
       button {
@@ -93,6 +92,7 @@
     .settingsContainer {
       margin: 0 0.6rem 0 auto;
       position: relative;
+      z-index: 2;
       .settings {
         display: none;
         flex-direction: column;

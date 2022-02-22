@@ -22,7 +22,7 @@ router.post("/login",async (req,res)=>{
         res.send(err)
     }
 })
-//Getting single users/groups
+//Getting users/groups chats
 router.post("/getUsers",async (req,res)=>{
     try{
         if(req.body.joinedChats){
