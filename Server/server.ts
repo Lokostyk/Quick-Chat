@@ -3,7 +3,9 @@ const cors = require("cors")
 const cloudinary = require("cloudinary")
 const moongose = require("mongoose")
 const express = require("express")
+const http = require("http")
 const app = express()
+export const server = http.createServer(app)
 
 const usersRouter = require("./Routes/handleUser")
 const chatRouter = require("./Routes/handleChat")
@@ -22,4 +24,4 @@ app.use("/handleChat",chatRouter)
 
 moongose.connect(process.env.MONGO_URI,()=>console.log("Connected!"))
 
-app.listen(3000)
+server.listen(3000)

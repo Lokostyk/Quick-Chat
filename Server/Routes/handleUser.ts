@@ -44,6 +44,9 @@ router.post("/getUserById",async (req,res)=>{
         console.log(err)
     }
 })
+router.post("getUsersByIds",async(req,res)=>{
+    const usersData = await userModel.find() 
+})
 //Creating account & changing email
 router.post("/",async (req,res)=>{
     const userData = await userModel.findOne({email:req.body.email})

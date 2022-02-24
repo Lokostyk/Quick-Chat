@@ -1,7 +1,17 @@
 export {}
+const {server} = require("./../server")
 const router = require("express").Router()
 const chatModel = require("../Models/chatModel")
 const userModel = require("../Models/userModel")
+const {Server} = require("socket.io")
+const io = new Server(server,{cors:{origin:"http://localhost:3001"}}) 
+
+io.on("connection",(socket)=>{
+    socket.on("join-room",({roomId})=>{
+        socket.join(roomId)
+    })
+    socket.on("message",(message)=>handleMessages(message,socket))    
+})
 
 router.post("/createSingle",(req,res)=>{
     const newChat = new chatModel({users:[req.body.userOneId,req.body.userTwoId],messages:[]})
@@ -63,5 +73,13 @@ router.post("/joinGroup",async (req,res)=>{
         console.log(err)
     }
 })
+const handleMessages = async (message,socket) => {
+    try{
+        await chatModel.findOneAndUpdate({_id:message.chatId},{$push:{messages:message}})
+        socket.to(message.chatId).emit("message",message)
+    }catch (err){
+        console.log(err)
+    }
+}
 
 module.exports = router
