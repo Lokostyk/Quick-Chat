@@ -1,6 +1,7 @@
 import "./mainHub.scss"
 import { useState,useEffect } from "react"
 import {useAppSelector} from "../../App/hooks"
+import {io} from "socket.io-client"
 import {URL} from "../../databaseUrl"
 import axios from "axios"
 import LeftBar from "../LeftBar/LeftBar"
@@ -12,12 +13,18 @@ export interface fetchedUser {
   surname:string,
   imgSmall:string
 }
+export interface Messages {
+  userId:string,
+  message:string,
+  messageId:string
+}
 export interface fetchedChatData {
   _id:string,
   groupName?: string,
   users: string[],
-  messages: string[]
+  messages: Messages[]
 }
+const Socket = io(`${URL}`)
 function MainHub() {
   const state = useAppSelector(state=>state.userSlice)
   const [singleConversations,setSingleConversations] = useState<fetchedUser[]>([])
@@ -49,7 +56,7 @@ function MainHub() {
   return (
     <section className="mainHubContainer">
       <LeftBar setChosenChat={setChosenChat} singleConversations={singleConversations} groupConversations={groupConversations}/>
-      {chosenChatData._id?<ChatWindow chatData={chosenChatData}/>:""}
+      {chosenChatData._id?<ChatWindow chatData={chosenChatData} socket={Socket}/>:""}
     </section>
   );
 }
