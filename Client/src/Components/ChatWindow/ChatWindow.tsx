@@ -12,7 +12,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
   const [otherUsersData,setOtherUsersData] = useState<fetchedUser[]>([{_id:"",name:"",surname:"",imgSmall:""}])
   const [messages,setMessages] = useState<Messages[]>([])
   const [currentMessage,setCurrentMessage] = useState("")
-  console.log(chatData.users)
+
   useEffect(()=>{
     setMessages(chatData.messages)
     if(!chatData.groupName || chatData.users.length === 2){
@@ -23,12 +23,15 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       })
       .catch(err=>console.log(err))
     }else {
-      const usersExceptClient = chatData.users.filter(id=>id !== state._id)
-      axios.post(`${URL}/handleUser/getUsersByIds`)
+      axios.post(`${URL}/handleUser/getUsersByIds`,chatData.users)
+      .then(res=>{
+        setOtherUsersData(res.data)
+      })
     }
     socket.emit("join-room",{roomId:chatData._id})
     socket.on("message",(res)=>{
-      console.log(res)
+      setMessages((prevState)=>[...prevState,res])
+      srollToBottom()
     })
   },[chatData])
   const sendMessage = (e:React.FormEvent<HTMLFormElement>) => {
@@ -38,6 +41,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     socket.emit("message",{...message,chatId:chatData._id})
     setMessages([...messages,message])
     setCurrentMessage("")
+    srollToBottom()
   }
   const displayImage = (messageData:Messages,otherUserMessageData:fetchedUser|undefined):string|undefined => {
     const defaultImagePath = "./Images/default.jpg"
@@ -59,6 +63,15 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     }else {
       return otherUserMessageData?.name + " " + otherUserMessageData?.surname
     }
+  }
+  const srollToBottom = () => {
+    setTimeout(()=>{
+      const containerToScroll = document.querySelector(".messagesContainer")
+      if(!containerToScroll) return
+      if(containerToScroll?.scrollHeight - containerToScroll?.clientHeight < containerToScroll?.scrollTop + containerToScroll?.clientHeight * 1.5){
+        containerToScroll?.scroll({top:containerToScroll.scrollHeight,behavior:"smooth"})
+      }
+    },10)
   }
   return (
   <section className="chatSection">
@@ -87,7 +100,8 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       <div className="bottomBar">
         <form onSubmit={(e)=>sendMessage(e)}>
           <input size={20} placeholder="Send a message..."
-          value={currentMessage} onChange={(e)=>setCurrentMessage(e.target.value)}/>
+          value={currentMessage} onChange={(e)=>setCurrentMessage(e.target.value)}
+          onFocus={()=>document.querySelector(".messagesContainer")?.scroll({top:document.querySelector(".messagesContainer")?.scrollHeight})}/>
         </form>
       </div>
   </section>)
