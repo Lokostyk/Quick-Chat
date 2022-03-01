@@ -55,10 +55,10 @@ router.post("/getChat",async(req,res)=>{
     try{
         //If userTwoId is empty it will search for group chat
         if(req.body.userTwoId){
-            const singleChat = await chatModel.findOne({groupName:null,$set:{users:[req.body.userOneId,req.body.userTwoId]}})
+            const singleChat = await chatModel.findOne({groupName:null,$set:{users:[req.body.userOneId,req.body.userTwoId]}},{messages:{$slice:20}})
             res.send(singleChat)
         }else {
-            const groupChat = await chatModel.findOne({_id:req.body.userOneId})
+            const groupChat = await chatModel.findOne({_id:req.body.userOneId},{messages:{$slice:20}})
             res.send(groupChat)
         }
     }catch (err){
@@ -69,6 +69,14 @@ router.post("/joinGroup",async (req,res)=>{
     try{
         await chatModel.updateOne({_id:req.body.groupId},{$push:{users:req.body.userId}})
         await userModel.updateOne({_id:req.body.userId},{$push:{joinedChats:req.body.groupId}})
+    }catch (err){
+        console.log(err)
+    }
+})
+router.post("/getMoreMessages",async (req,res)=>{
+    const moreMessages = await chatModel.findOne({_id:req.body.id},{messages:{$slice:[req.body.howMany,req.body.howMany+20]}},{messages:1})
+    try {
+        res.send(moreMessages)
     }catch (err){
         console.log(err)
     }
