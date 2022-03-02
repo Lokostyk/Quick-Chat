@@ -1,4 +1,6 @@
 import "./register.scss"
+import "../Login/login.scss"
+
 import React, {useCallback ,useState} from "react"
 import axios from "axios"
 import {URL} from "../../databaseUrl"
@@ -55,6 +57,7 @@ export default function Register() {
                     onChange={handleChange} name="passwordTwo" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Sign in"/>
                 </form>
+                <p>Already have an account?<a href="/login"><b>Log In</b></a></p>
             </div>
         </section>
     )

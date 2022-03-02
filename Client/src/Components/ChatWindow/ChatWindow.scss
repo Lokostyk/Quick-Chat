@@ -4,7 +4,11 @@
   height: 100vh;
   flex-direction: column;
   grid-template-rows: auto 1fr auto;
+  .mobileBtn {
+    display: none;
+  }
   .topBar {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -119,6 +123,17 @@
       font-size: 1.2rem;
       border-radius: 15px;
       border: 1px solid $main;
+    }
+  }
+}
+@media screen and (max-width: 800px) {
+  .chatSection {
+    .mobileBtn {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      display: flex;
+      transform: translateY(-50%);
     }
   }
 }

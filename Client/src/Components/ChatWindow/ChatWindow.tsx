@@ -20,7 +20,6 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
 
     axios.post(`${URL}/handleChat/getMoreMessages`,{id:chatData._id,howMany:0})
     .then(res=>{
-      console.log(res.data)
       setMessages(res.data.messages.reverse())
       mesContainer?.scroll({top:mesContainer.scrollHeight})
     })

@@ -3,4 +3,24 @@
   width: 100%;
   display: grid;
   grid-template-columns: auto 1fr;
+  .mobileBtnOpen {
+    display: none;
+  }
+}
+@media screen and (max-width: 800px) {
+  .mainHubContainer {
+    grid-template-columns: auto;
+    .mobileBtnOpen {
+      display: flex;
+      position: absolute;
+      left: 10px;
+      top: 6px;
+      border: none;
+      background-color: transparent;
+      z-index: 1;
+      img {
+        height: 30px;
+      }
+    }
+  }
 }

@@ -65,8 +65,12 @@ function MainHub() {
       setChosenChatData(res.data)
     })
   },[chosenChat])
+  const openLeftBar = () => {
+    document.querySelector(".leftBarContainer")?.classList.add("active")
+  }
   return (
     <section className="mainHubContainer">
+      <button className="mobileBtnOpen" onClick={openLeftBar}><img src="./Images/openLeftBar.svg" /></button>
       <LeftBar setChosenChat={setChosenChat} singleConversations={singleConversations} groupConversations={groupConversations}/>
       {chosenChatData._id?<ChatWindow chatData={chosenChatData} socket={Socket}/>:""}
     </section>

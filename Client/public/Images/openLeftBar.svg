@@ -1,0 +1,10 @@
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 1" clip-path="url(#clip0_2_3)">
+<path id="Polygon 1" d="M47 23.2679C48.3333 24.0377 48.3333 25.9623 47 26.7321L15.5 44.9186C14.1667 45.6884 12.5 44.7261 12.5 43.1865V6.81347C12.5 5.27387 14.1667 4.31162 15.5 5.08142L47 23.2679Z" fill="black"/>
+</g>
+<defs>
+<clipPath id="clip0_2_3">
+<rect width="50" height="50" fill="none" transform="translate(50) rotate(90)"/>
+</clipPath>
+</defs>
+</svg>

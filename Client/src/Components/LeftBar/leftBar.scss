@@ -1,9 +1,11 @@
 @import "../../mainColors";
 .leftBarContainer {
   height: 100vh;
+  position: relative;
   display: grid;
   grid-template-rows: auto 1fr 1fr auto;
   border-right: 2px solid $third;
+  transition: 1s all linear;
   .searchBox {
     background-color: $third;
     border-bottom: 1px solid $main;
@@ -182,6 +184,54 @@
           transition: 0.5s all;
         }
       }
+    }
+  }
+}
+@media screen and (max-width: 800px) {
+  .leftBarContainer {
+    position: absolute;
+    max-width: 0px;
+    overflow: hidden;
+    z-index: 1;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+    .mobileBtn {
+      padding: 0 0.3rem;
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      background-color: $third;
+      height: 120px;
+      width: 0px;
+      visibility: hidden;
+      border-radius: 10px 0 0 10px;
+      border: none;
+      transform: translateY(-50%) rotate(180deg);
+      transition: 0.1s all 1s;
+      z-index: 2;
+    }
+    .chatList {
+      background-color: $main;
+    }
+    .bottomInfo,
+    .searchBox {
+      z-index: 2;
+    }
+  }
+  .active {
+    max-width: 500px;
+    overflow: visible;
+    .mobileBtn {
+      width: 60px;
+      visibility: visible;
     }
   }
 }
