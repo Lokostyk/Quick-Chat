@@ -1,3 +1,5 @@
+import { pipeline } from "stream"
+
 export {}
 const {server} = require("./../server")
 const router = require("express").Router()
@@ -55,10 +57,10 @@ router.post("/getChat",async(req,res)=>{
     try{
         //If userTwoId is empty it will search for group chat
         if(req.body.userTwoId){
-            const singleChat = await chatModel.findOne({groupName:null,$set:{users:[req.body.userOneId,req.body.userTwoId]}},{messages:{$slice:20}})
+            const singleChat = await chatModel.findOne({groupName:null,$set:{users:[req.body.userOneId,req.body.userTwoId]}},{messages:0})
             res.send(singleChat)
         }else {
-            const groupChat = await chatModel.findOne({_id:req.body.userOneId},{messages:{$slice:20}})
+            const groupChat = await chatModel.findOne({_id:req.body.userOneId},{messages:0})
             res.send(groupChat)
         }
     }catch (err){
@@ -74,7 +76,7 @@ router.post("/joinGroup",async (req,res)=>{
     }
 })
 router.post("/getMoreMessages",async (req,res)=>{
-    const moreMessages = await chatModel.findOne({_id:req.body.id},{messages:{$slice:[req.body.howMany,req.body.howMany+20]}},{messages:1})
+    const moreMessages = await chatModel.findOne({_id:req.body.id},{messages:{$slice:[req.body.howMany,20]},_id:0,users:0,groupName:0,isPrivate:0})
     try {
         res.send(moreMessages)
     }catch (err){
@@ -83,7 +85,7 @@ router.post("/getMoreMessages",async (req,res)=>{
 })
 const handleMessages = async (message,socket) => {
     try{
-        await chatModel.findOneAndUpdate({_id:message.chatId},{$push:{messages:message}})
+        await chatModel.findOneAndUpdate({_id:message.chatId},{$push:{messages:{$each:[message],$position:0}}})
         socket.to(message.chatId).emit("message",message)
     }catch (err){
         console.log(err)

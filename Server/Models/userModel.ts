@@ -19,14 +19,17 @@ const userSchema = new moongose.Schema({
         required: true
     },
     imgSmall: {
-        type:String,
+        type:String
     },
     imgBig: {
-        type:String,
+        type:String
     },
     joinedChats: {
         type: Array,
         required: true
+    },
+    authToken: {
+        type: String
     }
 },{collection:"UserData"})
 

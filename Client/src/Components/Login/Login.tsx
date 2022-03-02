@@ -5,6 +5,7 @@ import {URL} from "../../databaseUrl"
 import {changeUserData} from "../../App/Reducers/userData"
 import {useAppDispatch,useAppSelector} from "../../App/hooks"
 import axios from "axios"
+import { nanoid } from "nanoid"
 
 import { Logo,Alert } from "../SharedComponents/sharedComponents"
 
@@ -23,10 +24,12 @@ export default function Login() {
     },[state])
     const hanldeLogIn = useCallback((e)=>{
         e.preventDefault()
-        axios.post(`${URL}/handleUser/login`,userData)
+        const authToken = nanoid(30)
+        axios.post(`${URL}/handleUser/login`,{...userData,authToken})
         .then(async (res)=>{
             if(res.data){
                 dispatch(changeUserData(res.data))
+                window.localStorage.setItem("authToken",authToken)
             }else {
                 setAlert("Wrong email or password!")
             }

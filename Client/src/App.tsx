@@ -1,4 +1,5 @@
-import {Routes,Route} from "react-router-dom"
+import { useEffect } from "react";
+import {Routes,Route, useNavigate} from "react-router-dom"
 
 import FrontPage from "./Components/FrontPage/FrontPage";
 import Login from "./Components/Login/Login"
@@ -6,6 +7,13 @@ import MainHub from "./Components/MainHub/MainHub";
 import Register from "./Components/Register/Register"
 
 function App() {
+  const navigate = useNavigate()
+  //If user have active token, log in
+  useEffect(()=>{
+    if(window.localStorage.getItem("authToken")){
+      navigate("/logged")
+    }
+  },[])
   return (
     <Routes>
       <Route path="/" element={<FrontPage />}/>
