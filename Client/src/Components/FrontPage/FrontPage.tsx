@@ -12,7 +12,7 @@ function FrontPage() {
           <Link to="/register" className="loginBtns">Register</Link>
         </div>
       </div>
-      <img className="backgroundImage" src="/Images/social.svg" />
+      <img className="backgroundImage" src="/Images/clouds.svg" />
     </section>
     )
 }

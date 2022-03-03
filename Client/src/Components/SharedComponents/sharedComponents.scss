@@ -2,6 +2,7 @@
 .logo {
   color: $second;
   font-size: 3.2rem;
+  white-space: nowrap;
   .wing {
     margin: 0 0.25rem;
     margin-bottom: 0.3rem;
@@ -9,6 +10,22 @@
     &:first-of-type {
       margin-right: 0.1rem;
       transform: rotateY(180deg);
+    }
+  }
+}
+@media screen and (max-width: 442px) {
+  .logo {
+    font-size: 2.5rem;
+    .wing {
+      height: 50px;
+    }
+  }
+}
+@media screen and (max-width: 370px) {
+  .logo {
+    font-size: 2rem;
+    .wing {
+      height: 40px;
     }
   }
 }

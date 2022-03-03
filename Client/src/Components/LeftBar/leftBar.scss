@@ -5,7 +5,9 @@
   display: grid;
   grid-template-rows: auto 1fr 1fr auto;
   border-right: 2px solid $third;
-  transition: 1s all linear;
+  .mobileBtn {
+    display: none;
+  }
   .searchBox {
     background-color: $third;
     border-bottom: 1px solid $main;
@@ -193,6 +195,7 @@
     max-width: 0px;
     overflow: hidden;
     z-index: 1;
+    transition: 1s max-width linear;
     &::before {
       content: "";
       position: absolute;
@@ -210,12 +213,10 @@
       top: 50%;
       background-color: $third;
       height: 120px;
-      width: 0px;
-      visibility: hidden;
+      width: 40px;
       border-radius: 10px 0 0 10px;
       border: none;
       transform: translateY(-50%) rotate(180deg);
-      transition: 0.1s all 1s;
       z-index: 2;
     }
     .chatList {
@@ -228,10 +229,13 @@
   }
   .active {
     max-width: 500px;
-    overflow: visible;
     .mobileBtn {
+      display: block;
       width: 60px;
       visibility: visible;
     }
+  }
+  .overflow {
+    overflow: visible;
   }
 }

@@ -66,7 +66,9 @@ function MainHub() {
     })
   },[chosenChat])
   const openLeftBar = () => {
-    document.querySelector(".leftBarContainer")?.classList.add("active")
+    const leftBarContainer = document.querySelector(".leftBarContainer")
+    leftBarContainer?.classList.add("active")
+    setTimeout(()=>leftBarContainer?.classList.add("overflow"),600)
   }
   return (
     <section className="mainHubContainer">

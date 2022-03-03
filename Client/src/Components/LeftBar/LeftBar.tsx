@@ -65,7 +65,9 @@ export default function LeftBar({singleConversations,groupConversations,setChose
     window.location.reload()
   }
   const closeLeftBar = () => {
-    document.querySelector(".leftBarContainer")?.classList.remove("active")
+    const leftBarContainer = document.querySelector(".leftBarContainer")
+    leftBarContainer?.classList.remove("active")
+    leftBarContainer?.classList.remove("overflow")
   }
   return (
     <>
@@ -74,7 +76,6 @@ export default function LeftBar({singleConversations,groupConversations,setChose
         <div className="searchBox">
           <input className="searchPreview" placeholder="Add single/group chat..." onFocus={()=>setSearch(true)}/>
         </div>
-        {search?<Search setSearch={setSearch}/>:""}
         <div className="chatList">
           <h2>Single Chats</h2>
           {singleConversations.map((item:fetchedUser)=>{
@@ -123,6 +124,7 @@ export default function LeftBar({singleConversations,groupConversations,setChose
           </div>
         </div>
     </div>
+      {search?<Search setSearch={setSearch}/>:""}
       {createGroup?<CreateGroup setCreateGroup={setCreateGroup} />:""}
       {accountSettings?<AccountSettings setAccountSettings={setAccountSettings}/>:""}
     </>

@@ -110,6 +110,9 @@
       }
     }
   }
+  form {
+    display: flex;
+  }
   .bottomBar {
     padding: 0.595rem;
     display: flex;
@@ -117,12 +120,27 @@
     justify-content: center;
     border-left: 1px solid $main;
     border-top: 1px solid $main;
-    input {
+    textarea {
       padding: 0.2rem;
       padding-inline-start: 0.4rem;
+      max-height: 10rem;
       font-size: 1.2rem;
-      border-radius: 15px;
+      border-radius: 15px 0 0 15px;
+      overflow-y: hidden;
+      resize: none;
       border: 1px solid $main;
+    }
+    .sendBtn {
+      padding: 0 0.15rem;
+      padding-right: 0.5rem;
+      border-radius: 0 15px 15px 0;
+      background-color: white;
+      border: 1px solid $main;
+      svg {
+        fill: $third;
+        margin-bottom: -2px;
+        height: 24px;
+      }
     }
   }
 }

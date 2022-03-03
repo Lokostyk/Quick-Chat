@@ -1,51 +1,38 @@
 @import "../../mainColors";
 .mainContainer {
-  display: grid;
-  grid-template-columns: auto auto;
-  align-items: center;
-  justify-items: center;
   min-height: 100vh;
   width: 100%;
   .subContainer {
-    margin-left: 3rem;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    transform: translate(-50%, -50%);
     z-index: 0;
     &::before {
       content: "";
       position: absolute;
       left: 50%;
       top: 50%;
-      background-color: #fff;
+      background-color: rgba(48, 136, 164, 0.2);
       height: 15rem;
       width: 15rem;
       border-radius: 50%;
       transform: translate(-50%, -50%);
-      opacity: 0.4;
       pointer-events: none;
       z-index: -1;
     }
   }
   .backgroundImage {
-    width: 75%;
-    animation: flying 1.8s infinite linear;
-    animation-delay: 1s;
-  }
-  @keyframes flying {
-    0% {
-      transform: translateY(0px);
-    }
-    25% {
-      transform: translateY(10px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-    100% {
-      transform: translateY(0px);
-    }
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+    z-index: -1;
   }
   .btnContainer {
     display: flex;
