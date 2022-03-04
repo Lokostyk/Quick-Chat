@@ -75,6 +75,14 @@ router.post("/joinGroup",async (req,res)=>{
         console.log(err)
     }
 })
+router.post("/kickUser",async (req,res)=>{
+    try{
+        await chatModel.updateOne({_id:req.body.chatId},{$pull:{users:req.body.userId}})
+        await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.chatId}})
+    }catch (err){
+        console.log(err)
+    }
+})
 router.post("/getMoreMessages",async (req,res)=>{
     const moreMessages = await chatModel.findOne({_id:req.body.id},{messages:{$slice:[req.body.howMany,20]},_id:0,users:0,groupName:0,isPrivate:0})
     try {

@@ -194,7 +194,7 @@
     position: absolute;
     max-width: 0px;
     overflow: hidden;
-    z-index: 1;
+    z-index: 3;
     transition: 1s max-width linear;
     &::before {
       content: "";

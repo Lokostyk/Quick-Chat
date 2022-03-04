@@ -14,6 +14,7 @@
     justify-content: center;
     background-color: $third;
     border-left: 1px solid $main;
+    border-bottom: 1px solid $main;
     img {
       height: 35px;
       width: 35px;
@@ -26,9 +27,26 @@
       font-weight: 500;
       color: $main;
     }
+    .settingsBtn {
+      position: absolute;
+      top: 50%;
+      right: 7px;
+      background-color: transparent;
+      border: none;
+      transform: translateY(-50%);
+      cursor: pointer;
+      svg {
+        fill: $main;
+        transition: 0.5s all;
+      }
+      &:hover svg {
+        transform: rotate(180deg);
+      }
+    }
   }
   .messagesContainer {
     padding: 0 0.5rem;
+    position: relative;
     display: flex;
     flex-direction: column;
     overflow: auto;
@@ -107,6 +125,71 @@
       p {
         border-radius: 15px;
         border-top-right-radius: 0;
+      }
+    }
+    .chatSettingsContainer {
+      position: fixed;
+      right: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: $third;
+      border-left: 1px solid $main;
+      height: 0px;
+      transition: 0.8s all;
+      z-index: 1;
+      .users {
+        display: flex;
+        flex-direction: column;
+      }
+      .userConatiner {
+        margin: 0.3rem 0.5rem;
+        display: flex;
+        align-items: center;
+        word-break: break-all;
+        max-width: 300px;
+        .userImg {
+          height: 40px;
+          width: 40px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+        h2 {
+          margin: 0.2rem;
+          font-size: 1.2rem;
+        }
+        button {
+          margin-top: 3px;
+          background-color: transparent;
+          border: none;
+          margin-left: auto;
+        }
+      }
+      .title {
+        margin: 1rem 0.5rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        color: $main;
+        hr {
+          margin: 0 auto;
+          margin-top: 0.1rem;
+          width: 50%;
+          border: 1.5px solid $main;
+          background-color: $main;
+          border-radius: 5px;
+        }
+      }
+      .leaveBtn {
+        padding: 0.3rem 0.5rem;
+        margin: auto 0 0.5rem 0;
+        background-color: #fd6961;
+        color: #ff1f1f;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.2rem;
+        cursor: pointer;
       }
     }
   }
