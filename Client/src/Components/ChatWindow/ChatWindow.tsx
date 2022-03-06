@@ -8,12 +8,14 @@ import { Socket } from "socket.io-client"
 import { nanoid } from "nanoid"
 import Messages from "./subcomponents/Messages"
 import ChatSettings from "./subcomponents/ChatSettings"
+import { Loader } from "../SharedComponents/sharedComponents"
 
 export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,socket:Socket}) {
   const state = useAppSelector(state=>state.userSlice)
   const observer = useRef<IntersectionObserver>()
   const [otherUsersData,setOtherUsersData] = useState<fetchedUser[]>([{_id:"",name:"",surname:"",imgSmall:""}])
   const [messages,setMessages] = useState<MessagesType[]>([])
+  const [load,setLoad] = useState(false)
   const [currentMessage,setCurrentMessage] = useState("")
 
   useEffect(()=>{
@@ -57,13 +59,16 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     if(observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries=>{
       if(entries[0].isIntersecting){
+        setLoad(true)
         axios.post(`${URL}/handleChat/getMoreMessages`,{id:chatData._id,howMany:messages.length})
         .then(res=>{
           if(res.data.messages.length === 0){
+            setLoad(false)
             observer.current?.disconnect()
             return
           }
           const reversedArray = res.data.messages.reverse()
+          setLoad(false)
           setMessages((prevState)=>[...reversedArray,...prevState])
         })
       }
@@ -88,7 +93,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     const messagesContainer = document.querySelector(".messagesContainer")
 
     if(!chatSettingsContainer || !messagesContainer) return
-    if(parseInt(chatSettingsContainer.style.height) !== 0){
+    if(parseInt(chatSettingsContainer.style.height) !== 0 && parseInt(chatSettingsContainer.style.height)){
       chatSettingsContainer.style.height = `0px`
     }else {
       chatSettingsContainer.style.height = `${messagesContainer.clientHeight-0.5}px`
@@ -117,6 +122,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
         </button>
       </div>
       <div className="messagesContainer">
+        {load?<Loader />:""}
         <ChatSettings otherUsersData={otherUsersData} chatData={chatData}/>
         <Messages messages={messages} chatData={chatData} otherUsersData={otherUsersData} loadMoreMessages={loadMoreMessages}/>
       </div>

@@ -7,6 +7,7 @@ import {URL} from "../../databaseUrl"
 import axios from "axios"
 import LeftBar from "../LeftBar/LeftBar"
 import ChatWindow from "../ChatWindow/ChatWindow"
+import DefaultChatWindow from "../DefaultChatWindow/DefaultChatWindow"
 
 export interface fetchedUser {
   _id:string,
@@ -74,7 +75,8 @@ function MainHub() {
     <section className="mainHubContainer">
       <button className="mobileBtnOpen" onClick={openLeftBar}><img src="./Images/openLeftBar.svg" /></button>
       <LeftBar setChosenChat={setChosenChat} singleConversations={singleConversations} groupConversations={groupConversations}/>
-      {chosenChatData._id?<ChatWindow chatData={chosenChatData} socket={Socket}/>:""}
+      {chosenChatData._id?<ChatWindow chatData={chosenChatData} socket={Socket}/>:<DefaultChatWindow />}
+      
     </section>
   );
 }

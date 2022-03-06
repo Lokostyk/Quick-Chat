@@ -1,0 +1,27 @@
+@import "../../mainColors";
+
+.DefaultChatContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 100vh;
+  img {
+    margin: 0.5rem 0;
+    height: 250px;
+  }
+  h2 {
+    margin: 0.1rem 0;
+    color: $third;
+  }
+  .topBar {
+    height: 43px;
+    background-color: $third;
+    border-left: 1px solid $main;
+  }
+  .bottomBar {
+    margin-top: auto;
+    height: 49.8px;
+    background-color: $third;
+    border-left: 1px solid $main;
+  }
+}

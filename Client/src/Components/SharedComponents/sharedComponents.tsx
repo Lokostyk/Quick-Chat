@@ -6,3 +6,6 @@ export const Logo = () =>{return <h1 className="logo"><img className="wing" src=
 
 //Alert
 export const Alert = ({data}:{data:string}) =>{return <p className="simpleAlert">{data}</p>}
+
+//Loader
+export const Loader = (()=><div className="lds-facebook"><div></div><div></div><div></div></div>)
