@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "quick-chat",
+  "builds": [
+    { "src": "server.tx", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/server.ts" }
+  ]
+}
