@@ -3,11 +3,30 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",
+    "noImplicitAny": false,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "node_modules/*"
+      ]
+    }
   },
-  "lib": [
-    "es2015"
-  ]
+  "include": ["server.ts","Routes/**/*","Models/**/*"]
 }
+// {
+//   "compilerOptions": {
+//     "module": "commonjs",
+//     "esModuleInterop": true,
+//     "target": "es6",
+//     "moduleResolution": "node",
+//     "sourceMap": true,
+//     "outDir": "dist"
+//   },
+//   "lib": [
+//     "es2015"
+//   ]
+// }
