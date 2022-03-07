@@ -4,7 +4,7 @@ const router = require("express").Router()
 const chatModel = require("../Models/chatModel")
 const userModel = require("../Models/userModel")
 const {Server} = require("socket.io")
-const io = new Server(server,{cors:{origin:"https://quickchat777.netlify.app"}}) 
+const io = new Server(server,{cors:{origin:"*"}}) 
 
 io.on("connection",(socket)=>{
     socket.on("join-room",({roomId})=>{

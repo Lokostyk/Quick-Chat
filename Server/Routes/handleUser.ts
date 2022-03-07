@@ -14,9 +14,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({storage})
 
 router.post("/login",async (req,res)=>{
-    console.log(req.body)
     const userData = await userModel.findOneAndUpdate({email:req.body.email,password:req.body.password},{$set:{authToken:req.body.authToken}})
-    console.log(userData)
     try {
         res.send(userData)
     }catch (err){
