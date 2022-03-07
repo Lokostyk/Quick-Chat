@@ -1,1 +1,1 @@
-export const URL = "quick-chatt-gnosqjxes-lokostyk.vercel.app"
+export const URL = "https://quick-chatt.vercel.app/"
