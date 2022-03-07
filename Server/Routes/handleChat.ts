@@ -1,12 +1,10 @@
-import { pipeline } from "stream"
-
 export {}
 const {server} = require("./../server")
 const router = require("express").Router()
 const chatModel = require("../Models/chatModel")
 const userModel = require("../Models/userModel")
 const {Server} = require("socket.io")
-const io = new Server(server,{cors:{origin:"http://localhost:3001"}}) 
+const io = new Server(server,{cors:{origin:"https://quickchat777.netlify.app/"}}) 
 
 io.on("connection",(socket)=>{
     socket.on("join-room",({roomId})=>{
