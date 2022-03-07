@@ -45,7 +45,7 @@ router.post("/getGroups",async (req,res)=>{
             const newGroupList = await chatModel.find({_id:{$in:req.body.joinedGroups}})
             res.send(newGroupList)
         }else {
-            const newGroupList = await chatModel.find({isPrivate:false})
+            const newGroupList = await chatModel.find({isPrivate:false},{messages:0})
             res.send(newGroupList)
         }
     }catch (err){
