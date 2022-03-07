@@ -16,7 +16,10 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-app.use(cors())
+app.use(cors({
+    origin:["https://quickchat777.netlify.app"],
+    credentials:true
+}))
 app.use(express.json())
 
 app.use("/handleUser",usersRouter)
