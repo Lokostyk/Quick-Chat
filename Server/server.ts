@@ -6,9 +6,8 @@ const express = require("express")
 const http = require("http")
 const app = express()
 export const server = http.createServer(app)
-
-const usersRouter = require("./Routes/handleUser")
-const chatRouter = require("./Routes/handleChat")
+app.use(cors())
+app.options('*', cors())
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -16,13 +15,19 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
-app.use(cors())
+//Importing routes
+const usersRouter = require("./Routes/handleUser")
+const chatRouter = require("./Routes/handleChat")
 
+//middleware
 app.use(express.json())
 
+//routes
 app.use("/handleUser",usersRouter)
 app.use("/handleChat",chatRouter)
 
+//Database
 moongose.connect(process.env.MONGO_URI,()=>console.log("Connected!"))
 
+//Server
 server.listen(3000)
