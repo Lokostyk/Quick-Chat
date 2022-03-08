@@ -1,5 +1,6 @@
 require("dotenv").config()
 const cors = require("cors")
+const allowCors = require('./Config/vercelCORS')
 const cloudinary = require("cloudinary")
 const moongose = require("mongoose")
 const express = require("express")
@@ -16,10 +17,12 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
+app.use(allowCors())
 app.use(cors({
     origin:["https://quickchat777.netlify.app"],
     credentials:true
 }))
+
 app.use(express.json())
 
 app.use("/handleUser",usersRouter)
