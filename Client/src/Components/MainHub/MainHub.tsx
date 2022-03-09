@@ -8,6 +8,7 @@ import axios from "axios"
 import LeftBar from "../LeftBar/LeftBar"
 import ChatWindow from "../ChatWindow/ChatWindow"
 import DefaultChatWindow from "../DefaultChatWindow/DefaultChatWindow"
+import { FullscreenLoader } from "../SharedComponents/sharedComponents"
 
 export interface fetchedUser {
   _id:string,
@@ -26,7 +27,7 @@ export interface fetchedChatData {
   users: string[],
   messages: MessagesType[]
 }
-const Socket = io(`${URL}`)
+const Socket = io(`${URL}`,{"transports": ['websocket']})
 function MainHub() {
   const authToken = localStorage.getItem("authToken")
   const state = useAppSelector(state=>state.userSlice)
@@ -35,7 +36,9 @@ function MainHub() {
   const [groupConversations,setGroupConversations] = useState<fetchedChatData[]>([])
   const [chosenChat,setChosenChat] = useState({userOneId:"",userTwoId:""})
   const [chosenChatData,setChosenChatData] = useState<fetchedChatData>({} as fetchedChatData)
-
+  const [loader,setLoader] = useState(true)
+  const [conversationLoader,setConversationLoader] = useState(false)
+  
   //Log in user with token
   useEffect(()=>{
     if(authToken){
@@ -52,18 +55,23 @@ function MainHub() {
   useEffect(()=>{
     axios.post(`${URL}/handleUser/getUsers`,{joinedChats:state.joinedChats})
     .then(res=>{
+      if(res.data.length === 0) return
       setSingleConversations(res.data)
     })
     axios.post(`${URL}/handleChat/getGroups`,{joinedGroups:state.joinedChats})
     .then(res=>{
+      if(res.data.length === 0) return
       setGroupConversations(res.data)
     })
+    setLoader(false)
   },[state])
   useEffect(()=>{
+    setConversationLoader(true)
     if(chosenChat.userOneId === "") return
     axios.post(`${URL}/handleChat/getChat`,chosenChat)
     .then(res=>{
       setChosenChatData(res.data)
+      setConversationLoader(false)
     })
   },[chosenChat])
   const openLeftBar = () => {
@@ -75,8 +83,10 @@ function MainHub() {
     <section className="mainHubContainer">
       <button className="mobileBtnOpen" onClick={openLeftBar}><img src="./Images/openLeftBar.svg" /></button>
       <LeftBar setChosenChat={setChosenChat} singleConversations={singleConversations} groupConversations={groupConversations}/>
-      {chosenChatData._id?<ChatWindow chatData={chosenChatData} socket={Socket}/>:<DefaultChatWindow />}
-      
+      {chosenChatData._id?
+        conversationLoader?<DefaultChatWindow loader={conversationLoader}/>:<ChatWindow chatData={chosenChatData} socket={Socket}/>
+        :<DefaultChatWindow />}
+      {loader || !state.name?<FullscreenLoader />:""}
     </section>
   );
 }

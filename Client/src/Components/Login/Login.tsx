@@ -7,7 +7,7 @@ import {useAppDispatch,useAppSelector} from "../../App/hooks"
 import axios from "axios"
 import { nanoid } from "nanoid"
 
-import { Logo,Alert } from "../SharedComponents/sharedComponents"
+import { Logo,Alert, FullscreenLoader } from "../SharedComponents/sharedComponents"
 
 export default function Login() {
     const dispatch = useAppDispatch()
@@ -16,26 +16,27 @@ export default function Login() {
 
     const [userData,setUserData] = useState({email:"",password:""})
     const [alert,setAlert] = useState("")
+    const [load,setLoad] = useState(false)
     
     useEffect(()=>{
         if(state.name !== ""){
             navigate("/logged")
         }
     },[state])
-    const hanldeLogIn = useCallback((e)=>{
+    const handleLogIn = useCallback((e)=>{
         e.preventDefault()
         const authToken = nanoid(30)
+        setLoad(true)
+        
         axios.post(`${URL}/handleUser/login`,{...userData,authToken})
         .then(async (res)=>{
+            setLoad(false)
             if(res.data){
                 dispatch(changeUserData(res.data))
                 window.localStorage.setItem("authToken",authToken)
             }else {
                 setAlert("Wrong email or password!")
             }
-        })
-        .catch(err=>{
-            console.log(err)
         })
     },[userData])
     const handleChange = useCallback((e)=>{
@@ -46,7 +47,7 @@ export default function Login() {
             <div className="formContainer">
                 <Logo />
                 <Alert data={alert}/>
-                <form onSubmit={(e)=>hanldeLogIn(e)}>
+                <form onSubmit={(e)=>handleLogIn(e)}>
                     <input type="email" placeholder="E-mail" value={userData.email}
                     onChange={handleChange} name="email" required/>
                     <input type="password" placeholder="Password" value={userData.password}
@@ -55,6 +56,7 @@ export default function Login() {
                 </form>
                 <p>Don't have an account? <Link to="/register"><b>Sign up</b></Link></p>
             </div>
+            {load?<FullscreenLoader />:""}
         </section>
     )
 }

@@ -1,18 +1,21 @@
 import "./ChatWindow.scss"
-import { URL } from "../../databaseUrl"
-import { fetchedChatData,fetchedUser,MessagesType } from "../MainHub/MainHub"
-import { useCallback, useEffect,useRef,useState } from "react"
-import { useAppSelector } from "../../App/hooks"
-import axios from "axios"
+
+import { useCallback, useEffect,useRef,useState,KeyboardEvent } from "react"
 import { Socket } from "socket.io-client"
 import { nanoid } from "nanoid"
+import axios from "axios"
+
+import { fetchedChatData,fetchedUser,MessagesType } from "../MainHub/MainHub"
+import { useAppSelector } from "../../App/hooks"
+import { Loader } from "../SharedComponents/sharedComponents"
+import { URL } from "../../databaseUrl"
 import Messages from "./subcomponents/Messages"
 import ChatSettings from "./subcomponents/ChatSettings"
-import { Loader } from "../SharedComponents/sharedComponents"
 
 export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,socket:Socket}) {
   const state = useAppSelector(state=>state.userSlice)
   const observer = useRef<IntersectionObserver>()
+  let textareRef = useRef<HTMLTextAreaElement | null>(null)
   const [otherUsersData,setOtherUsersData] = useState<fetchedUser[]>([{_id:"",name:"",surname:"",imgSmall:""}])
   const [messages,setMessages] = useState<MessagesType[]>([])
   const [load,setLoad] = useState(false)
@@ -33,19 +36,35 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       .then(res=>{
         setOtherUsersData([res.data])
       })
-      .catch(err=>console.log(err))
     }else {
       axios.post(`${URL}/handleUser/getUsersByIds`,chatData.users)
       .then(res=>{
         setOtherUsersData(res.data)
       })
     }
+    
     socket.emit("join-room",{roomId:chatData._id})
     socket.on("message",(res)=>{
       setMessages((prevState)=>[...prevState,res])
       scrollToBottom()
     })
   },[chatData])
+  //Teaxtarea submit on enter && another line on shift + enter
+  useEffect(()=>{
+    const teaxtarea = document.querySelector(".teaxtarea")
+    const submitBtn = document.getElementById("sendBtn")
+
+    if(teaxtarea === null || submitBtn === null) return
+    let lastPressedKey:string;
+    teaxtarea.addEventListener("keydown",(e:any)=>{
+      if(e.key === "Enter" && lastPressedKey !== "Shift"){
+        e.preventDefault()
+        submitBtn.click()
+      }
+      lastPressedKey = e.key
+    })
+  },[])
+
   const sendMessage = (e:React.FormEvent<HTMLFormElement>) => {
     const messageId = nanoid()
     e.preventDefault()
@@ -128,10 +147,10 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       </div>
       <div className="bottomBar">
         <form onSubmit={(e)=>sendMessage(e)}>
-          <textarea rows={1} placeholder="Send a message..." minLength={1} required
+          <textarea className="teaxtarea" rows={1} placeholder="Send a message..." minLength={1} required
           value={currentMessage} onChange={(e)=>handleComment(e)}
           onFocus={()=>document.querySelector(".messagesContainer")?.scroll({top:document.querySelector(".messagesContainer")?.scrollHeight})}/>
-          <button className="sendBtn">
+          <button className="sendBtn" id="sendBtn">
             <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
               width="31.806px" height="31.806px" viewBox="0 0 31.806 31.806">
             <g>

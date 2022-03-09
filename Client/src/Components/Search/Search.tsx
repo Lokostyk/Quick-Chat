@@ -5,6 +5,7 @@ import { URL } from "../../databaseUrl"
 import { useAppDispatch, useAppSelector } from "../../App/hooks"
 import {changeUserData} from "../../App/Reducers/userData"
 import FirstPlanWindow from "../HigherOrderComponents/firstPlanWindow"
+import { Loader } from "../SharedComponents/sharedComponents"
 
 interface User {
   _id:string,
@@ -24,19 +25,22 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
   const [users,setUsers] = useState<{initial:User[],afterSearch:User[]}>({initial:[],afterSearch:[]})
   const [groups,setGroups] = useState<{initial:Group[],afterSearch:Group[]}>({initial:[],afterSearch:[]})
   const [searchInput,setSearchInput] = useState("") 
+  const [load,setLoad] = useState<{single:boolean,group:boolean}>({single:false,group:false})
 
   useEffect(()=>{
     inputRef.current?.focus()
+      setLoad({group:true,single:true})
     axios.post(`${URL}/handleUser/getUsers`)
     .then(res=>{
       const usersData = res.data.filter((item:User)=>item._id !== state._id && !state.joinedChats.includes(item._id))
       setUsers({initial:usersData,afterSearch:usersData})
+      setLoad(prevState=>{return {...prevState,single:false}})
     })
-    .catch(err=>console.log(err))
     axios.post(`${URL}/handleChat/getGroups`)
     .then(res=>{
       const groupData = res.data.filter((item:Group)=>!item.users.includes(state._id))
       setGroups({initial:groupData,afterSearch:groupData})
+      setLoad(prevState=>{return {...prevState,group:false}})
     })
   },[])
   const joinSingleConverastion = (otherUserId:string) => {
@@ -80,27 +84,36 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
             <input className="search" ref={inputRef} placeholder="Search by id or name..."
             value={searchInput} onChange={handleSerachChange}/>
             <h2>Single Chats</h2>
-            <div className="chatContainer">
-              {users.afterSearch.map(item=>{
-                return (
-                  <div key={item._id}>
-                    <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
-                    <p>{item.name} {item.surname}</p>
-                    <button onClick={()=>joinSingleConverastion(item._id)}>ADD</button>
-                  </div>
-                  )
-              })}
-              {users.afterSearch.length === 0?<h3>We ranned out of users :(</h3>:""}
+            <div className="chatContainer" style={load?{overflowY:"hidden"}:{overflowY:"auto"}}>
+              {load.group?
+                <Loader />:
+                <>
+                  {users.afterSearch.map(item=>{
+                    return (
+                      <div key={item._id} className="singleChat">
+                        <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
+                        <p>{item.name} {item.surname}</p>
+                        <button onClick={()=>joinSingleConverastion(item._id)}>ADD</button>
+                      </div>
+                      )
+                  })}
+                  {users.afterSearch.length === 0?<h3>We ranned out of users :(</h3>:""}
+                </>}
             </div>
             <h2>Group Chats</h2>
-            <div className="chatContainer">
-              {groups.afterSearch.map(item=>{
-                return (<div className="groupChat" key={item._id}>
-                  <p>{item.groupName}</p>
-                  <button onClick={()=>joinGroupConversation(item._id)}>ADD</button>
-                </div>)
-              })}
-              {groups.afterSearch.length === 0?<h3>We ranned out of groups :(</h3>:""}
+            <div className="chatContainer" style={load?{overflowY:"hidden"}:{overflowY:"auto"}}>
+              {load.group?
+                <Loader />:
+                <>
+                  {groups.afterSearch.map(item=>{
+                    return (<div className="groupChat" key={item._id}>
+                      <p>{item.groupName}</p>
+                      <button onClick={()=>joinGroupConversation(item._id)}>ADD</button>
+                    </div>)
+                  })}
+                  {groups.afterSearch.length === 0?<h3>We ranned out of groups :(</h3>:""}
+                </>
+              }
             </div>
   </FirstPlanWindow>)
 }
