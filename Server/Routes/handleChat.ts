@@ -1,16 +1,20 @@
 export {}
-const {server} = require("./../server")
 const router = require("express").Router()
+const {pusher} = require("./../server")
+
 const chatModel = require("../Models/chatModel")
 const userModel = require("../Models/userModel")
-const {Server} = require("socket.io")
-const io = new Server(server,{cors:{origin:"*"}}) 
 
-io.on("connection",(socket)=>{
-    socket.on("join-room",({roomId})=>{
-        socket.join(roomId)
-    })
-    socket.on("message",(message)=>handleMessages(message,socket))    
+// io.on("connection",(socket)=>{
+//     socket.on("join-room",({roomId})=>{
+//         socket.join(roomId)
+//     })
+//     socket.on("message",(message)=>handleMessages(message,socket))    
+// })
+
+router.post("/sendMessage",async (req,res)=>{
+    console.log(req.body)
+    pusher.trigger(req.body.chatId,"message",req.body.message)
 })
 
 router.post("/createSingle",(req,res)=>{

@@ -1,11 +1,12 @@
 require("dotenv").config()
-const cors = require("cors")
 const cloudinary = require("cloudinary")
 const moongose = require("mongoose")
 const express = require("express")
 const http = require("http")
 const app = express()
-export const server = http.createServer(app)
+const server = http.createServer(app)
+const Pusher = require("pusher") 
+const cors = require("cors")
 app.use(cors())
 app.options('*', cors())
 
@@ -13,6 +14,13 @@ cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
+})
+
+export const pusher = new Pusher({
+    "appId": process.env.PUSHER_APP_ID,
+    "key": process.env.PUSHER_KEY,
+    "secret": process.env.PUSHER_SECRET,
+    "cluster": process.env.PUSHER_CLUSTER
 })
 
 //Importing routes
