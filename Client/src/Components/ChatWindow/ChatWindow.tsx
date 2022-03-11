@@ -1,8 +1,8 @@
 import "./ChatWindow.scss"
 
-import { useCallback, useEffect,useRef,useState,KeyboardEvent } from "react"
-import { Socket } from "socket.io-client"
+import { useCallback, useEffect,useRef,useState } from "react"
 import { nanoid } from "nanoid"
+import Pusher from "pusher-js/types/src/core/pusher"
 import axios from "axios"
 
 import { fetchedChatData,fetchedUser,MessagesType } from "../MainHub/MainHub"
@@ -12,10 +12,9 @@ import { URL } from "../../databaseUrl"
 import Messages from "./subcomponents/Messages"
 import ChatSettings from "./subcomponents/ChatSettings"
 
-export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,socket:Socket}) {
+export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,socket:Pusher}) {
   const state = useAppSelector(state=>state.userSlice)
   const observer = useRef<IntersectionObserver>()
-  let textareRef = useRef<HTMLTextAreaElement | null>(null)
   const [otherUsersData,setOtherUsersData] = useState<fetchedUser[]>([{_id:"",name:"",surname:"",imgSmall:""}])
   const [messages,setMessages] = useState<MessagesType[]>([])
   const [load,setLoad] = useState(false)
@@ -42,12 +41,15 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
         setOtherUsersData(res.data)
       })
     }
-    
-    socket.emit("join-room",{roomId:chatData._id})
-    socket.on("message",(res)=>{
+    //Online chat functionality
+    socket.subscribe(chatData._id)
+    const channel = socket.channel(chatData._id)
+    channel.bind("message",(res:MessagesType)=>{
+      console.log(res)
       setMessages((prevState)=>[...prevState,res])
       scrollToBottom()
     })
+    return socket.unsubscribe(chatData._id)
   },[chatData])
   //Teaxtarea submit on enter && another line on shift + enter
   useEffect(()=>{
@@ -66,10 +68,10 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
   },[])
 
   const sendMessage = (e:React.FormEvent<HTMLFormElement>) => {
-    const messageId = nanoid()
     e.preventDefault()
+    const messageId = nanoid()
     const message = {message:currentMessage,userId:state._id,messageId}
-    socket.emit("message",{...message,chatId:chatData._id})
+    axios.post(`${URL}/handleChat/sendMessage`,{message,chatId:chatData._id})
     setMessages([...messages,message])
     setCurrentMessage("")
     scrollToBottom()

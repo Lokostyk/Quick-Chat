@@ -1,14 +1,15 @@
 import "./mainHub.scss"
 import { useState,useEffect } from "react"
+import Pusher from "pusher-js"
+import axios from "axios"
+
 import {useAppDispatch, useAppSelector} from "../../App/hooks"
 import { changeUserData } from "../../App/Reducers/userData"
-import {io} from "socket.io-client"
+import { FullscreenLoader } from "../SharedComponents/sharedComponents"
 import {URL} from "../../databaseUrl"
-import axios from "axios"
 import LeftBar from "../LeftBar/LeftBar"
 import ChatWindow from "../ChatWindow/ChatWindow"
 import DefaultChatWindow from "../DefaultChatWindow/DefaultChatWindow"
-import { FullscreenLoader } from "../SharedComponents/sharedComponents"
 
 export interface fetchedUser {
   _id:string,
@@ -27,7 +28,8 @@ export interface fetchedChatData {
   users: string[],
   messages: MessagesType[]
 }
-const Socket = io(`${URL}`,{"transports": ['websocket']})
+
+const Socket = new Pusher(process.env.REACT_APP_PUSHER_KEY as string,{cluster:"eu"})
 function MainHub() {
   const authToken = localStorage.getItem("authToken")
   const state = useAppSelector(state=>state.userSlice)
