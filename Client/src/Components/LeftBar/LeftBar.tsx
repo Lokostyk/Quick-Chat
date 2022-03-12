@@ -1,11 +1,13 @@
 import "./leftBar.scss"
-import { useEffect, useState } from "react"
-import { useAppSelector } from "../../App/hooks"
-import AccountSettings from "../AccountSettings/AccountSettings"
-import Search from "../Search/Search"
-import CreateGroup from '../CreateGroup/CreateGroup'
+
+import {  useState } from "react"
 
 import { fetchedUser,fetchedChatData } from "../MainHub/MainHub"
+import { useAppSelector } from "../../App/hooks"
+import AccountSettings from "../AccountSettings/AccountSettings"
+import CreateGroup from '../CreateGroup/CreateGroup'
+import Search from "../Search/Search"
+
 
 export default function LeftBar({singleConversations,groupConversations,setChosenChat}:{singleConversations:fetchedUser[],groupConversations:fetchedChatData[],setChosenChat:React.Dispatch<React.SetStateAction<{userOneId: string;userTwoId: string;}>>}) {
   const state = useAppSelector(state=>state.userSlice)
@@ -13,7 +15,7 @@ export default function LeftBar({singleConversations,groupConversations,setChose
   const [accountSettings,setAccountSettings] = useState(false)
   const [search,setSearch] = useState(false)
   const [createGroup,setCreateGroup] = useState(false)
-
+  
   const windowClick = () => {
       settingsContainer?.classList.remove("openSettings")
       window.removeEventListener("click",windowClick)

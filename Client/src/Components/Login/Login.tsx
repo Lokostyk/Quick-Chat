@@ -13,7 +13,6 @@ export default function Login() {
     const dispatch = useAppDispatch()
     const state = useAppSelector(state=>state.userSlice)
     const navigate = useNavigate()
-
     const [userData,setUserData] = useState({email:"",password:""})
     const [alert,setAlert] = useState("")
     const [load,setLoad] = useState(false)
@@ -27,7 +26,6 @@ export default function Login() {
         e.preventDefault()
         const authToken = nanoid(30)
         setLoad(true)
-        
         axios.post(`${URL}/handleUser/login`,{...userData,authToken})
         .then(async (res)=>{
             setLoad(false)

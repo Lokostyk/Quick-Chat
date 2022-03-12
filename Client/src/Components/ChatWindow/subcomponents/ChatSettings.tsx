@@ -1,13 +1,22 @@
 import axios from "axios"
+import { useState } from "react"
+
+import { fetchedChatData,fetchedUser } from "../../MainHub/MainHub"
 import { useAppSelector } from "../../../App/hooks"
 import { URL } from "../../../databaseUrl"
-import { fetchedChatData,fetchedUser,MessagesType } from "../../MainHub/MainHub"
 
 export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:fetchedUser[],chatData:fetchedChatData}) {
   const state = useAppSelector(state=>state.userSlice)
+  const [userId,setUserId] = useState("")
 
+  const addUser = (e:React.FormEvent<HTMLFormElement>) => { 
+    e.preventDefault()
+    axios.post(`${URL}/handleChat/addUser`,{userId})
+    setUserId("")  
+  }
   const kickUser = (userId:string,chatId:string) => {
-      axios.post(`${URL}/handleChat/deleteUser`,{userId,chatId})
+      axios.post(`${URL}/handleChat/kickUser`,{userId,chatId})
+      window.location.reload()
   }
   return (<div className="chatSettingsContainer" id="chatSettingsContainer" onClick={e=>e.stopPropagation()}>
       <h2 className="title">
@@ -16,6 +25,7 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
       </h2>
       <div className="users">
         {otherUsersData.map((user)=>{
+            if(!user.joinedChats?.includes(chatData._id) && chatData.groupName) return
             return (<div className="userConatiner" key={user._id}>
                 <img className="userImg" src={user.imgSmall === ""?'./Images/default.jpg':user.imgSmall}/>
                 <h2>{user.name + " " + user.surname}</h2>
@@ -23,6 +33,17 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
                 </div>)
         })}
       </div>
-      <button className="leaveBtn" onClick={()=>kickUser(state._id,chatData._id)}>Leave Conversation</button>
+      {chatData.isPrivate?
+      <>
+        <h2 className="title">
+          Add
+          <hr />
+        </h2>
+        <form onSubmit={addUser}>
+          <input type="text" value={userId} onChange={e=>setUserId(e.target.value)} placeholder="Add user by Id"/>
+          <input type="button" className="greenBtn" value="ADD"/>
+        </form>
+      </>:""}
+      <button className="leaveBtn" onClick={()=>chatData.groupName?kickUser(state._id,chatData._id):kickUser(state._id,otherUsersData[0]._id)}>Leave Conversation</button>
     </div>)
 }

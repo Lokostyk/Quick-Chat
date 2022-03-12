@@ -42,14 +42,13 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       })
     }
     //Online chat functionality
-    socket.subscribe(chatData._id)
-    const channel = socket.channel(chatData._id)
-    channel.bind("message",(res:MessagesType)=>{
-      console.log(res)
-      setMessages((prevState)=>[...prevState,res])
-      scrollToBottom()
-    })
-    return socket.unsubscribe(chatData._id)
+      const channel = socket.subscribe(chatData._id)
+      channel.bind("message",(res:MessagesType)=>{
+        setMessages((prevState)=>[...prevState,res])
+        scrollToBottom()
+      })
+
+    return () => socket.unsubscribe(chatData._id)
   },[chatData])
   //Teaxtarea submit on enter && another line on shift + enter
   useEffect(()=>{
@@ -71,10 +70,13 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     e.preventDefault()
     const messageId = nanoid()
     const message = {message:currentMessage,userId:state._id,messageId}
+    const textarea = document.getElementsByClassName("teaxtarea")[0]
+
     axios.post(`${URL}/handleChat/sendMessage`,{message,chatId:chatData._id})
-    setMessages([...messages,message])
     setCurrentMessage("")
-    scrollToBottom()
+    if(textarea instanceof HTMLElement){
+      textarea.style.height = "1.95rem"
+    }
   }
   const loadMoreMessages = useCallback((node:HTMLDivElement) => {
     if(observer.current) observer.current.disconnect()

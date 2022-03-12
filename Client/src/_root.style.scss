@@ -25,3 +25,15 @@ body {
 button {
   cursor: pointer;
 }
+.greenBtn {
+  padding: 0.2rem 0.8rem;
+  background-color: rgba(76, 175, 80, 0.8);
+  border: none;
+  color: green;
+  text-transform: capitalize;
+  font-weight: 600;
+  transition: 0.3s all;
+  &:hover {
+    background-color: rgb(76, 175, 80);
+  }
+}

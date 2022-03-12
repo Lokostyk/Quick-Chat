@@ -23,7 +23,7 @@ router.post("/login",async (req,res)=>{
     }
 })
 router.post("/tokenAuthentication",async (req,res)=>{
-    const userData = await userModel.findOne({tokenAuth:req.body.authToken})
+    const userData = await userModel.findOne({authToken:req.body.authToken})
     try{
         res.send(userData)
     }catch (err){
@@ -34,10 +34,10 @@ router.post("/tokenAuthentication",async (req,res)=>{
 router.post("/getUsers",async (req,res)=>{
     try{
         if(req.body.joinedChats){
-            const users = await userModel.find({_id:{$in:req.body.joinedChats}},{password:0,email:0,imgBig:0,joinedChats:0})
+            const users = await userModel.find({_id:{$in:req.body.joinedChats}},{password:0,email:0,imgBig:0,joinedChats:0,authToken:0})
             res.send(users)
         }else {
-            const users = await userModel.find({},{password:0,email:0,imgBig:0,joinedChats:0})
+            const users = await userModel.find({},{password:0,email:0,imgBig:0,joinedChats:0,authToken:0})
             res.send(users)
         }
     }catch (err){
@@ -45,7 +45,7 @@ router.post("/getUsers",async (req,res)=>{
     }
 })
 router.post("/getUserById",async (req,res)=>{
-    const userData = await userModel.findOne({_id:req.body.id},{password:0,email:0,imgBig:0,joinedChats:0})
+    const userData = await userModel.findOne({_id:req.body.id},{password:0,email:0,imgBig:0,authToken:0})
     try {
         res.send(userData)
     }catch (err){
@@ -53,7 +53,7 @@ router.post("/getUserById",async (req,res)=>{
     }
 })
 router.post("/getUsersByIds",async (req,res)=>{
-    const usersData = await userModel.find({_id:{$in:req.body}},{password:0,email:0,imgBig:0,joinedChats:0}) 
+    const usersData = await userModel.find({_id:{$in:req.body}},{password:0,email:0,imgBig:0,authToken:0}) 
     try{
         res.send(usersData)
     }catch (err){

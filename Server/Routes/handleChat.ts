@@ -1,22 +1,13 @@
 export {}
 const router = require("express").Router()
-const {pusher} = require("./../server")
+const {pusher} = require("../server")
 
 const chatModel = require("../Models/chatModel")
 const userModel = require("../Models/userModel")
 
-// io.on("connection",(socket)=>{
-//     socket.on("join-room",({roomId})=>{
-//         socket.join(roomId)
-//     })
-//     socket.on("message",(message)=>handleMessages(message,socket))    
-// })
-
 router.post("/sendMessage",async (req,res)=>{
-    console.log(req.body)
-    pusher.trigger(req.body.chatId,"message",req.body.message)
+    handleMessages(req.body.message,req.body.chatId)
 })
-
 router.post("/createSingle",(req,res)=>{
     const newChat = new chatModel({users:[req.body.userOneId,req.body.userTwoId],messages:[]})
     try {
@@ -77,9 +68,15 @@ router.post("/joinGroup",async (req,res)=>{
         console.log(err)
     }
 })
+router.post("/addUser",async(req,res)=>{
+    try {
+        console.log(req.body)
+    }catch (err){
+        console.log(err)
+    }
+})
 router.post("/kickUser",async (req,res)=>{
     try{
-        await chatModel.updateOne({_id:req.body.chatId},{$pull:{users:req.body.userId}})
         await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.chatId}})
     }catch (err){
         console.log(err)
@@ -93,10 +90,11 @@ router.post("/getMoreMessages",async (req,res)=>{
         console.log(err)
     }
 })
-const handleMessages = async (message,socket) => {
+
+const handleMessages = async (message,chatId) => {
     try{
-        await chatModel.findOneAndUpdate({_id:message.chatId},{$push:{messages:{$each:[message],$position:0}}})
-        socket.to(message.chatId).emit("message",message)
+        await chatModel.findOneAndUpdate({_id:chatId},{$push:{messages:{$each:[message],$position:0}}})
+        pusher.trigger(chatId,"message",message)
     }catch (err){
         console.log(err)
     }

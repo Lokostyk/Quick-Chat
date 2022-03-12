@@ -15,7 +15,8 @@ export interface fetchedUser {
   _id:string,
   name:string,
   surname:string,
-  imgSmall:string
+  imgSmall:string,
+  joinedChats?: string[]
 }
 export interface MessagesType {
   userId:string,
@@ -26,7 +27,8 @@ export interface fetchedChatData {
   _id:string,
   groupName?: string,
   users: string[],
-  messages: MessagesType[]
+  messages: MessagesType[],
+  isPrivate: boolean
 }
 
 const Socket = new Pusher(process.env.REACT_APP_PUSHER_KEY as string,{cluster:"eu"})
@@ -40,11 +42,11 @@ function MainHub() {
   const [chosenChatData,setChosenChatData] = useState<fetchedChatData>({} as fetchedChatData)
   const [loader,setLoader] = useState(true)
   const [conversationLoader,setConversationLoader] = useState(false)
-  
+
   //Log in user with token
   useEffect(()=>{
     if(authToken){
-      axios.post(`${URL}/handleUser/tokenAuthentication`,{authToken:authToken})
+      axios.post(`${URL}/handleUser/tokenAuthentication`,{authToken})
       .then(res=>{
         dispatch(changeUserData(res.data))
       })

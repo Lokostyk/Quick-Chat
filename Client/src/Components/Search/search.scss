@@ -45,6 +45,7 @@
       width: 100%;
     }
     img {
+      width: 55px;
       height: 55px;
       border-radius: 50%;
     }
@@ -54,19 +55,8 @@
       font-size: 1.1rem;
     }
     button {
-      padding: 0.2rem 0.8rem;
       margin-left: auto;
       margin-right: 0.2rem;
-      background-color: rgba(76, 175, 80, 0.8);
-      border: none;
-      color: green;
-      text-transform: capitalize;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s all;
-      &:hover {
-        background-color: rgb(76, 175, 80);
-      }
     }
     .groupChat {
       margin: 0.5rem 0;

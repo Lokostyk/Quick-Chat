@@ -143,6 +143,8 @@
       .users {
         display: flex;
         flex-direction: column;
+        max-height: 50%;
+        overflow: auto;
       }
       .userConatiner {
         margin: 0.3rem 0.5rem;

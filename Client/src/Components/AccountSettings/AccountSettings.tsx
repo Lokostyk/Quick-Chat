@@ -106,6 +106,7 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                     onChange={handleChange} name="passwordNew" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Change Password"/>
                 </form>
+                <p className="yourId">Your ID:<i>{state._id}</i></p>
         </FirstPlanWindow>
     )
 }

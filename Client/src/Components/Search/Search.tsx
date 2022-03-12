@@ -38,7 +38,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
     })
     axios.post(`${URL}/handleChat/getGroups`)
     .then(res=>{
-      const groupData = res.data.filter((item:Group)=>!item.users.includes(state._id))
+      const groupData = res.data.filter((item:Group)=>!state.joinedChats.includes(item._id))
       setGroups({initial:groupData,afterSearch:groupData})
       setLoad(prevState=>{return {...prevState,group:false}})
     })
@@ -93,7 +93,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
                       <div key={item._id} className="singleChat">
                         <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
                         <p>{item.name} {item.surname}</p>
-                        <button onClick={()=>joinSingleConverastion(item._id)}>ADD</button>
+                        <button onClick={()=>joinSingleConverastion(item._id)} className="greenBtn">ADD</button>
                       </div>
                       )
                   })}
