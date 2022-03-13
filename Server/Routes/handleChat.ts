@@ -70,7 +70,8 @@ router.post("/joinGroup",async (req,res)=>{
 })
 router.post("/addUser",async(req,res)=>{
     try {
-        console.log(req.body)
+        await chatModel.findOneAndUpdate({_id:req.body.chatId},{$push:{users:req.body.userId}})
+        await userModel.findOneAndUpdate({_id:req.body.userId},{$push:{joinedChats:req.body.chatId}})
     }catch (err){
         console.log(err)
     }

@@ -11,7 +11,7 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
 
   const addUser = (e:React.FormEvent<HTMLFormElement>) => { 
     e.preventDefault()
-    axios.post(`${URL}/handleChat/addUser`,{userId})
+    axios.post(`${URL}/handleChat/addUser`,{userId,chatId:chatData._id})
     setUserId("")  
   }
   const kickUser = (userId:string,chatId:string) => {
@@ -41,7 +41,7 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
         </h2>
         <form onSubmit={addUser}>
           <input type="text" value={userId} onChange={e=>setUserId(e.target.value)} placeholder="Add user by Id"/>
-          <input type="button" className="greenBtn" value="ADD"/>
+          <input type="submit" className="greenBtn" value="ADD"/>
         </form>
       </>:""}
       <button className="leaveBtn" onClick={()=>chatData.groupName?kickUser(state._id,chatData._id):kickUser(state._id,otherUsersData[0]._id)}>Leave Conversation</button>

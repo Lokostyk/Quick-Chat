@@ -1,5 +1,5 @@
-import { Loader } from '../SharedComponents/sharedComponents'
 import './defaultChatWindow.scss'
+import { Loader } from '../SharedComponents/sharedComponents'
 
 export default function DefaultChatWindow({loader = false}:{loader?:boolean}) {
   return (<div className='DefaultChatContainer'>

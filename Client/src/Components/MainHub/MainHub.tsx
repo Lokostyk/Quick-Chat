@@ -70,8 +70,8 @@ function MainHub() {
     setLoader(false)
   },[state])
   useEffect(()=>{
-    setConversationLoader(true)
     if(chosenChat.userOneId === "") return
+    setConversationLoader(true)
     axios.post(`${URL}/handleChat/getChat`,chosenChat)
     .then(res=>{
       setChosenChatData(res.data)
@@ -89,7 +89,7 @@ function MainHub() {
       <LeftBar setChosenChat={setChosenChat} singleConversations={singleConversations} groupConversations={groupConversations}/>
       {chosenChatData._id?
         conversationLoader?<DefaultChatWindow loader={conversationLoader}/>:<ChatWindow chatData={chosenChatData} socket={Socket}/>
-        :<DefaultChatWindow />}
+        :conversationLoader?<DefaultChatWindow loader={conversationLoader}/>:<DefaultChatWindow />}
       {loader || !state.name?<FullscreenLoader />:""}
     </section>
   );

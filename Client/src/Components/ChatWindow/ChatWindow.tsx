@@ -92,6 +92,10 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
           }
           const reversedArray = res.data.messages.reverse()
           setLoad(false)
+          const mesConatiner = document.querySelector(".messagesContainer")
+          if(mesConatiner){
+            mesConatiner.scrollTop = 10
+          }
           setMessages((prevState)=>[...reversedArray,...prevState])
         })
       }
