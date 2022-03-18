@@ -45,19 +45,19 @@ export default function Register() {
                     <p className="simpleAlert">{alert}</p>
                     <div>
                         <input type="text" placeholder="Name" value={formData.name}
-                        onChange={handleChange} name="name" aria-label="register-input" required/>
+                        onChange={handleChange} name="name" required/>
                         <input type="text" placeholder="Surname" value={formData.surname}
-                        onChange={handleChange} name="surname" aria-label="register-input" required/>
+                        onChange={handleChange} name="surname" required/>
                     </div>
                     <input type="email" placeholder="E-mail" value={formData.email}
-                    onChange={handleChange} name="email" aria-label="register-input" required/>
+                    onChange={handleChange} name="email" required/>
                     <input type="password" placeholder="Password" value={formData.passwordOne}
-                    onChange={handleChange} name="passwordOne" aria-label="register-input" minLength={8} maxLength={20} required/>
+                    onChange={handleChange} name="passwordOne" minLength={8} maxLength={20} required/>
                     <input type="password" placeholder="Repeat password" value={formData.passwordTwo}
-                    onChange={handleChange} name="passwordTwo" aria-label="register-input" minLength={8} maxLength={20} required/>
+                    onChange={handleChange} name="passwordTwo" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Sign in"/>
                 </form>
-                <p>Already have an account?<a href="/login" target="_blank"><b>Log In</b></a></p>
+                <p>Already have an account?<a href="/login" data-testid="loginBtn"><b>Log In</b></a></p>
             </div>
         </section>
     )

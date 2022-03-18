@@ -52,7 +52,7 @@ export default function Login() {
                     onChange={handleChange} name="password" required/>
                     <input type="submit" value="Log In"/>
                 </form>
-                <p>Don't have an account? <Link to="/register"><b>Sign up</b></Link></p>
+                <p>Don't have an account? <Link to="/register" data-testid="registerBtn"><b>Sign up</b></Link></p>
             </div>
             {load?<FullscreenLoader />:""}
         </section>
