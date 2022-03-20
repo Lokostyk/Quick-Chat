@@ -20,7 +20,7 @@ export default function CreateGroup({setCreateGroup}:{setCreateGroup:React.Dispa
   }
   return (
     <FirstPlanWindow setShowWindow={setCreateGroup}>
-        <h1>CreateGroup</h1>
+        <h1 data-testid="createGroupTitle">Create Group</h1>
         <hr />
         <form onSubmit={(e)=>createGroup(e)}>
             <h2>Group Name</h2>

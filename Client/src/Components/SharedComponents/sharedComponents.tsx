@@ -8,7 +8,7 @@ export const Logo = () => {return <h1 className="logo"><img className="wing" src
 export const Alert = ({data}:{data:string}) => {return <p className="simpleAlert">{data}</p>}
 
 //Loader
-export const Loader = ({transformValue = 1}:{transformValue?:number}) => <div className="lds-roller" style={{transform:`scale(${transformValue})`}}><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+export const Loader = ({transformValue = 1}:{transformValue?:number}) => <div className="lds-roller" style={{transform:`scale(${transformValue})`}} data-testid="loading"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
 //Fullscreen Loader
 export const FullscreenLoader = () => <div className="fullscreenLoader"><Loader transformValue={1.7}/><h2>Please wait...</h2></div>

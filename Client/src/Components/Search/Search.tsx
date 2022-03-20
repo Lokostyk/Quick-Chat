@@ -24,12 +24,12 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
   let inputRef = useRef<HTMLInputElement>(null)
   const [users,setUsers] = useState<{initial:User[],afterSearch:User[]}>({initial:[],afterSearch:[]})
   const [groups,setGroups] = useState<{initial:Group[],afterSearch:Group[]}>({initial:[],afterSearch:[]})
-  const [searchInput,setSearchInput] = useState("") 
+  const [searchInput,setSearchInput] = useState("")
   const [load,setLoad] = useState<{single:boolean,group:boolean}>({single:false,group:false})
 
   useEffect(()=>{
     inputRef.current?.focus()
-      setLoad({group:true,single:true})
+    setLoad({group:true,single:true})
     axios.post(`${URL}/handleUser/getUsers`)
     .then(res=>{
       const usersData = res.data.filter((item:User)=>item._id !== state._id && !state.joinedChats.includes(item._id))
@@ -80,7 +80,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
   }
   return (
         <FirstPlanWindow setShowWindow={setSearch}>
-            <h1>Search for your friends and groups!</h1>
+            <h1 data-testid="searchTitle">Search for your friends and groups!</h1>
             <input className="search" ref={inputRef} placeholder="Search by id or name..."
             value={searchInput} onChange={handleSerachChange}/>
             <h2>Single Chats</h2>
@@ -90,7 +90,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
                 <>
                   {users.afterSearch.map(item=>{
                     return (
-                      <div key={item._id} className="singleChat">
+                      <div key={item._id} className="singleChat" data-testid="singleChat">
                         <img src={item.imgSmall === ""?"/Images/default.jpg":item.imgSmall}/>
                         <p>{item.name} {item.surname}</p>
                         <button onClick={()=>joinSingleConverastion(item._id)} className="greenBtn">ADD</button>
@@ -106,7 +106,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
                 <Loader />:
                 <>
                   {groups.afterSearch.map(item=>{
-                    return (<div className="groupChat" key={item._id}>
+                    return (<div className="groupChat" key={item._id} data-testid="groupChat">
                       <p>{item.groupName}</p>
                       <button onClick={()=>joinGroupConversation(item._id)}>ADD</button>
                     </div>)
