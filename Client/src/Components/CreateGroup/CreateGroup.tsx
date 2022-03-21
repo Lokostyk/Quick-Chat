@@ -17,6 +17,7 @@ export default function CreateGroup({setCreateGroup}:{setCreateGroup:React.Dispa
   const createGroup = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     axios.post(`${URL}/handleChat/createGroup`,groupData)
+    setGroupData({...groupData,groupName:"",isPrivate:false})
   }
   return (
     <FirstPlanWindow setShowWindow={setCreateGroup}>
@@ -24,7 +25,7 @@ export default function CreateGroup({setCreateGroup}:{setCreateGroup:React.Dispa
         <hr />
         <form onSubmit={(e)=>createGroup(e)}>
             <h2>Group Name</h2>
-            <input value={groupData.groupName} 
+            <input value={groupData.groupName} data-testid="groupNameInput"
             onChange={(e)=>setGroupData({...groupData,groupName:e.target.value})} max={25} required/>
             <h2>Private</h2>
             <input type="checkbox" checked={groupData.isPrivate} 

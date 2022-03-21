@@ -83,16 +83,16 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                 <h2>Name & Surname</h2>
                 <form onSubmit={submitNameSurnameChange}>
                     <div>
-                        <input type="text" placeholder="Name" value={formData.name}
+                        <input type="text" placeholder="Name" value={formData.name} data-testid="inputName"
                         onChange={handleChange} name="name" required/>
-                        <input type="text" placeholder="Surname" value={formData.surname}
+                        <input type="text" placeholder="Surname" value={formData.surname} data-testid="inputSurname"
                         onChange={handleChange} name="surname" required/>
                     </div>
                     <input type="submit" value="Save"/>
                 </form>
                 <h2>Email</h2>
                 <form onSubmit={submitEmailChange}>
-                    <input type="email" placeholder="E-mail" value={formData.email}
+                    <input type="email" placeholder="E-mail" value={formData.email} data-testid="inputEmail"
                     onChange={handleChange} name="email" required/>
                     <input type="password" placeholder="Password" value={formData.passwordEmail}
                     onChange={handleChange} name="passwordEmail" minLength={8} maxLength={20} required/>
@@ -106,7 +106,7 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                     onChange={handleChange} name="passwordNew" minLength={8} maxLength={20} required/>
                     <input type="submit" value="Change Password"/>
                 </form>
-                <p className="yourId">Your ID:<i>{state._id}</i></p>
+                <p className="yourId">Your ID:<i data-testid="userId">{state._id}</i></p>
         </FirstPlanWindow>
     )
 }
