@@ -26,10 +26,10 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
       <div className="users">
         {otherUsersData.map((user)=>{
             if(!user.joinedChats?.includes(chatData._id) && chatData.groupName) return
-            return (<div className="userConatiner" key={user._id}>
+            return (<div className="userConatiner" key={user._id} data-testid="userContainer">
                 <img className="userImg" src={user.imgSmall === ""?'./Images/default.jpg':user.imgSmall}/>
                 <h2>{user.name + " " + user.surname}</h2>
-                {state._id === otherUsersData[0]._id && chatData.groupName?<button onClick={()=>kickUser(user._id,chatData._id)}><img src="./Images/delete.svg"/></button>:""}
+                {state._id === otherUsersData[0]._id && chatData.groupName?<button onClick={()=>kickUser(user._id,chatData._id)} data-testid="deleteBtn"><img src="./Images/delete.svg"/></button>:""}
                 </div>)
         })}
       </div>

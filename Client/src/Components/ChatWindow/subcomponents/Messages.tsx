@@ -31,7 +31,7 @@ export default function Messages({messages,chatData,otherUsersData,loadMoreMessa
         const otherUserMessageData = otherUsersData.find((i)=>i._id === item.userId)
         return (
           <div ref={index===0?loadMoreMessages:()=>{}}
-          key={item.messageId} className={`message ${item.userId === state._id?"right":""}`}>
+          key={item.messageId} className={`message ${item.userId === state._id?"right":""}`} data-testid={`message-${item.messageId}`}>
             <div>
               <div className="imgCover">
                 <img src={displayImage(item,otherUserMessageData)}/>
