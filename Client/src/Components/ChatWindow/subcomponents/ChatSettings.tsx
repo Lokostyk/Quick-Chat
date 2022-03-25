@@ -14,9 +14,11 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
     axios.post(`${URL}/handleChat/addUser`,{userId,chatId:chatData._id})
     setUserId("")  
   }
-  const kickUser = (userId:string,chatId:string) => {
-      axios.post(`${URL}/handleChat/kickUser`,{userId,chatId})
-      window.location.reload()
+  //UserTwo in need when converastion is a single chat
+  const kickUser = (userId:string,chatId:string,userTwoId?:string) => {
+    console.log(userId,chatId,userTwoId)
+      axios.post(`${URL}/handleChat/kickUser`,{userId,chatId,userTwoId})
+      // window.location.reload()
   }
   return (<div className="chatSettingsContainer" id="chatSettingsContainer" onClick={e=>e.stopPropagation()}>
       <h2 className="title">
@@ -44,6 +46,6 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
           <input type="submit" className="greenBtn" value="ADD"/>
         </form>
       </>:""}
-      <button className="leaveBtn" onClick={()=>chatData.groupName?kickUser(state._id,chatData._id):kickUser(state._id,otherUsersData[0]._id)}>Leave Conversation</button>
+      <button className="leaveBtn" onClick={()=>chatData.groupName?kickUser(state._id,chatData._id):kickUser(state._id,chatData._id,otherUsersData[0]._id)}>Leave Conversation</button>
     </div>)
 }

@@ -25,7 +25,7 @@ router.post("/createGroup",(req,res)=>{
     try{
         newChat.save()
         .then(async()=>{
-            await userModel.updateOne({_id:req.body.userOneId},{$push:{joinedChats:newChat._id}})
+            await userModel.updateOne({_id:req.body.userOneId},{$push:{joinedChats:newChat._id.toString()}})
         })
     }catch (err){
         console.log(err)
@@ -77,8 +77,16 @@ router.post("/addUser",async(req,res)=>{
     }
 })
 router.post("/kickUser",async (req,res)=>{
+    const group = await chatModel.findOne({_id:req.body.chatId})
     try{
-        await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.chatId}})
+        if(req.body.userTwoId){
+            await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.userTwoId}})
+        }else {
+            await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.chatId}})
+        }
+        if(group.users.length === 0){
+            await chatModel.findOneAndDelete({_id:req.body.chatId})
+        }
     }catch (err){
         console.log(err)
     }

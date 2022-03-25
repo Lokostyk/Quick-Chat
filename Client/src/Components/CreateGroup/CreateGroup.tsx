@@ -11,13 +11,15 @@ interface groupData {
     isPrivate: boolean
 }
 export default function CreateGroup({setCreateGroup}:{setCreateGroup:React.Dispatch<React.SetStateAction<boolean>>}) {
-  const state = useAppSelector(state=>state.userSlice) 
+  const state = useAppSelector(state=>state.userSlice)
   const [groupData,setGroupData] = useState<groupData>({userOneId:state._id,groupName:"",isPrivate:false})
 
   const createGroup = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if(/^\s*$/.test(groupData.groupName)) return
     axios.post(`${URL}/handleChat/createGroup`,groupData)
     setGroupData({...groupData,groupName:"",isPrivate:false})
+    window.location.reload()
   }
   return (
     <FirstPlanWindow setShowWindow={setCreateGroup}>

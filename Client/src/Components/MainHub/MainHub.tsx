@@ -48,11 +48,16 @@ function MainHub() {
     if(authToken){
       axios.post(`${URL}/handleUser/tokenAuthentication`,{authToken})
       .then(res=>{
-        dispatch(changeUserData(res.data))
+        if(res.data){
+          dispatch(changeUserData(res.data))
+        }else {
+          window.localStorage.clear()
+          window.location.pathname = "/"
+        }
       })
     }
   },[])
-  // Checking if user is logged in
+  // Check if user is logged in
   if(!state.name && !authToken){
     window.location.pathname = "/"
   }

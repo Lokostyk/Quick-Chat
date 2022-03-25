@@ -8,7 +8,7 @@ const multer = require("multer")
 const storage = new CloudinaryStorage({
     cloudinary:cloudinary,
     params: {
-        folder: "QuickChat"
+        folder: process.env.CLOUDINARY_FOLDER_NAME
     }
 })
 const upload = multer({storage})

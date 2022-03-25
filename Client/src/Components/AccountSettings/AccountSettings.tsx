@@ -75,7 +75,7 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
                 <h1>Account Settings</h1>
                 <hr />
                 <p className="simpleAlert">{alert}</p>
-                <label className="profilePicture">
+                <label className="profilePicture" data-testid="userImage">
                     <img className="hoverImg" src="/Images/edit_round.svg" alt="Edit" />
                     <input type="file" onChange={handleProfilePictureChange} name="avatar" accept="image/*"/>
                     <img className="picture" src={state.imgBig === ""?"/Images/default.jpg":state.imgBig} alt="profile picture" />
