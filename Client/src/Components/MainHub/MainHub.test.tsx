@@ -21,7 +21,13 @@ jest.mock("../../App/hooks",()=> ({
     useAppSelector: () => mockUserData
 }))
 jest.mock('axios')
-jest.mock('pusher-js')
+jest.mock('pusher-js',()=>(
+  jest.fn().mockImplementation(()=>({
+    subscribe: (channel_name: string) => ({ 
+      bind: () => { } }), 
+    unsubscribe: (channel_name: string) => { } 
+  }))
+))
 
 const mockSingleConversations = [
 {
@@ -64,7 +70,7 @@ const fetchedChatData = {
 describe("MainHub component tests",()=>{
     beforeEach(async ()=>{
         (axios.post as jest.Mock).mockResolvedValueOnce({data:mockSingleConversations});
-        (axios.post as jest.Mock).mockResolvedValueOnce({data:mockSingleConversations});
+        (axios.post as jest.Mock).mockResolvedValueOnce({data:mockGroupCoversations});
         (axios.post as jest.Mock).mockResolvedValueOnce({data:fetchedChatData});
         (axios.post as jest.Mock).mockResolvedValueOnce({data:{messages:[]}});
         (axios.post as jest.Mock).mockResolvedValueOnce({data:mockSingleConversations[0]});

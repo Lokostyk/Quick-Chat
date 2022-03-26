@@ -16,6 +16,7 @@ export default function Register() {
 
     const handleRegistration = useCallback((e:React.FormEvent)=>{
         e.preventDefault()
+        if(/^\s*$/.test(formData.name) || /^\s*$/.test(formData.surname) || /^\s*$/.test(formData.passwordOne) || /^\s*$/.test(formData.passwordTwo)) return
         if(formData.passwordOne === formData.passwordTwo){
             const finalUserData = {name:formData.name,surname:formData.surname,
             email:formData.email,password:formData.passwordOne,imgSmall:"",imgBig:"",joinedChats:[]}

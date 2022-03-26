@@ -25,12 +25,14 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
     },[])
     const submitNameSurnameChange = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(/^\s*$/.test(formData.name) || /^\s*$/.test(formData.surname)) return
         if(state.name === formData.name && state.surname === formData.surname && state.email === formData.email) return
         axios.patch(`${URL}/handleUser/updateUserData`,{...formData,_id:state._id})
         dispatch(changeUserData({...state,name:formData.name,surname:formData.surname}))
     }
     const submitEmailChange = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(/^\s*$/.test(formData.email) || /^\s*$/.test(formData.passwordEmail)) return
         if(formData.email === state.email) return
         if(formData.passwordEmail === state.password){
             axios.post(`${URL}/handleUser`,{_id:state._id,email:formData.email,changeEmail:true})
@@ -48,6 +50,7 @@ export default function AccountSettings({setAccountSettings}:{setAccountSettings
     }
     const submitPasswordChange = (e:React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if(/^\s*$/.test(formData.passwordOld) || /^\s*$/.test(formData.passwordNew)) return
         if(formData.passwordOld === state.password){
             axios.patch(`${URL}/handleUser/updateUserData`,{password:formData.passwordNew,_id:state._id})
             dispatch(changeUserData({...state,password:formData.passwordNew}))

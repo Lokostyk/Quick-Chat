@@ -108,7 +108,7 @@ export default function Search({setSearch}:{setSearch:React.Dispatch<React.SetSt
                   {groups.afterSearch.map(item=>{
                     return (<div className="groupChat" key={item._id} data-testid="groupChat">
                       <p>{item.groupName}</p>
-                      <button onClick={()=>joinGroupConversation(item._id)}>ADD</button>
+                      <button onClick={()=>joinGroupConversation(item._id)} className="greenBtn">ADD</button>
                     </div>)
                   })}
                   {groups.afterSearch.length === 0?<h3>We ranned out of groups :(</h3>:""}
