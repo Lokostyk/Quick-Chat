@@ -8,14 +8,20 @@ const userModel = require("../Models/userModel")
 router.post("/sendMessage",async (req,res)=>{
     handleMessages(req.body.message,req.body.chatId)
 })
-router.post("/createSingle",(req,res)=>{
-    const newChat = new chatModel({users:[req.body.userOneId,req.body.userTwoId],messages:[]})
+router.post("/createSingle",async (req,res)=>{
+    const chat = await chatModel.findOne({users:{$all:[req.body.userOneId,req.body.userTwoId]},groupName:{$exists:false}})
     try {
-        newChat.save()
-        .then(async()=>{
-            await userModel.updateOne({_id:req.body.userOneId},{$push:{joinedChats:req.body.userTwoId}})
-            await userModel.updateOne({_id:req.body.userTwoId},{$push:{joinedChats:req.body.userOneId}})         
-        })
+        //Check if chat already exists
+        if(!chat){
+            const newChat = new chatModel({users:[req.body.userOneId,req.body.userTwoId],messages:[]})
+            newChat.save()
+            .then(async()=>{
+                await userModel.updateOne({_id:req.body.userOneId},{$push:{joinedChats:req.body.userTwoId}})
+                await userModel.updateOne({_id:req.body.userTwoId},{$push:{joinedChats:req.body.userOneId}})         
+            })
+        }else {
+            await userModel.findOneAndUpdate({_id:req.body.userOneId},{$push:{joinedChats:req.body.userTwoId}})
+        }
     }catch (err){
         console.log(err)
     }
@@ -77,7 +83,7 @@ router.post("/addUser",async(req,res)=>{
     }
 })
 router.post("/kickUser",async (req,res)=>{
-    const group = await chatModel.findOne({_id:req.body.chatId})
+    const group = await chatModel.findOneAndUpdate({_id:req.body.chatId},{$pull:{users:req.body.userId}},{upsert:true,returnOriginal: false})
     try{
         if(req.body.userTwoId){
             await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.userTwoId}})

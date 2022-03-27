@@ -16,9 +16,8 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
   }
   //UserTwo in need when converastion is a single chat
   const kickUser = (userId:string,chatId:string,userTwoId?:string) => {
-    console.log(userId,chatId,userTwoId)
       axios.post(`${URL}/handleChat/kickUser`,{userId,chatId,userTwoId})
-      // window.location.reload()
+      window.location.reload()
   }
   return (<div className="chatSettingsContainer" id="chatSettingsContainer" onClick={e=>e.stopPropagation()}>
       <h2 className="title">
