@@ -67,31 +67,37 @@ router.post("/getChat",async(req,res)=>{
     }
 })
 router.post("/joinGroup",async (req,res)=>{
+    const group = await chatModel.findOne({_id:req.body.groupId})
     try{
-        await chatModel.updateOne({_id:req.body.groupId},{$push:{users:req.body.userId}})
+        if(!group.users.includes(req.body.userId)){
+            await chatModel.updateOne({_id:req.body.groupId},{$push:{users:req.body.userId}})
+        }
         await userModel.updateOne({_id:req.body.userId},{$push:{joinedChats:req.body.groupId}})
     }catch (err){
         console.log(err)
     }
 })
 router.post("/addUser",async(req,res)=>{
+    const group = await chatModel.findOne({_id:req.body.chatId})
+    const user = await userModel.findOne({_id:req.body.userId})
     try {
-        await chatModel.findOneAndUpdate({_id:req.body.chatId},{$push:{users:req.body.userId}})
-        await userModel.findOneAndUpdate({_id:req.body.userId},{$push:{joinedChats:req.body.chatId}})
+        console.log(group.users.includes(req.body.userId),req.body.userId,group)
+        if(!group.users.includes(req.body.userId)){
+            await chatModel.findOneAndUpdate({_id:req.body.chatId},{$push:{users:req.body.userId}})
+        }
+        if(!user.joinedChats.includes(req.body.chatId)){
+            await userModel.findOneAndUpdate({_id:req.body.userId},{$push:{joinedChats:req.body.chatId}})
+        }
     }catch (err){
         console.log(err)
     }
 })
 router.post("/kickUser",async (req,res)=>{
-    const group = await chatModel.findOneAndUpdate({_id:req.body.chatId},{$pull:{users:req.body.userId}},{upsert:true,returnOriginal: false})
     try{
         if(req.body.userTwoId){
             await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.userTwoId}})
         }else {
             await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.chatId}})
-        }
-        if(group.users.length === 0){
-            await chatModel.findOneAndDelete({_id:req.body.chatId})
         }
     }catch (err){
         console.log(err)

@@ -45,6 +45,10 @@ export default function Login() {
             <div className="formContainer">
                 <Logo />
                 <Alert data={alert}/>
+                <div style={{textAlign:"center"}}>
+                    <i>Test email: admin@gmail.com</i><br/>
+                    <i>Test password: admin12345</i>
+                </div>
                 <form onSubmit={(e)=>handleLogIn(e)}>
                     <input type="email" placeholder="E-mail" value={userData.email}
                     onChange={handleChange} name="email" required/>

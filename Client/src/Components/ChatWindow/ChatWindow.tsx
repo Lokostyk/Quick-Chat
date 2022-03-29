@@ -44,6 +44,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     //Online chat functionality
       const channel = socket.subscribe(chatData._id)
       channel.bind("message",(res:MessagesType)=>{
+        if(res.userId === state._id) return
         setMessages((prevState)=>[...prevState,res])
         scrollToBottom()
       })
@@ -75,6 +76,8 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
 
     axios.post(`${URL}/handleChat/sendMessage`,{message,chatId:chatData._id})
     setCurrentMessage("")
+    setMessages((prevState)=>[...prevState,message])
+    scrollToBottom()
     if(textarea instanceof HTMLElement){
       textarea.style.height = "1.95rem"
     }
@@ -83,6 +86,10 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     if(observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries=>{
       if(entries[0].isIntersecting){
+        const messagesContainer = document.querySelector(".messagesContainer")
+        //Prevent from loading more when last message is displayed
+        console.log(messagesContainer?.scrollHeight,messagesContainer?.clientHeight)
+        if(messagesContainer && messagesContainer?.scrollHeight <= messagesContainer?.clientHeight) return
         setLoad(true)
         axios.post(`${URL}/handleChat/getMoreMessages`,{id:chatData._id,howMany:messages.length})
         .then(res=>{
@@ -156,7 +163,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       </div>
       <div className="bottomBar">
         <form onSubmit={(e)=>sendMessage(e)}>
-          <textarea className="teaxtarea" rows={1} placeholder="Send a message..." minLength={1} required
+          <textarea className="teaxtarea" rows={1} placeholder="Send a message..." minLength={1}
           value={currentMessage} onChange={(e)=>handleComment(e)}
           onFocus={()=>document.querySelector(".messagesContainer")?.scroll({top:document.querySelector(".messagesContainer")?.scrollHeight})}/>
           <button className="sendBtn" id="sendBtn" data-testid="sendBtn">
