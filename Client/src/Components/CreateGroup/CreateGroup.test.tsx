@@ -12,6 +12,14 @@ jest.mock("../../App/hooks",()=>({
 }))
 
 describe("CreateGroup component tests",()=>{
+    beforeAll(()=>{
+        //Mock reload
+        Object.defineProperty(window, 'location', {
+        configurable: false,
+        value: { reload: ()=>{
+            location.pathname = "http://localhost:3000"
+        }}})
+    })
     beforeEach(()=>{
         render(<Provider store={store}><CreateGroup setCreateGroup={{} as React.Dispatch<React.SetStateAction<boolean>>}/></Provider>)
     })

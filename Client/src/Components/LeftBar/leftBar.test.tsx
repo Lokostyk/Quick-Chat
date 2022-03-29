@@ -62,7 +62,6 @@ describe("LeftBar component tests",()=>{
         Object.defineProperty(window, 'location', {
         configurable: false,
         value: { reload: ()=>{
-            localStorage.clear()
             location.pathname = "http://localhost:3000"
         }},
     });
