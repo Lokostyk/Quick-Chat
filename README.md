@@ -4,7 +4,6 @@
     </div>
     <i>Created for educational puroposes.</i>
     <br/>
-    <br/>
     <h2>Technologies used</h2>
     <h3>Frontend:</h3>
     <div>
@@ -30,7 +29,6 @@
         <img src="https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white" />
         <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" />
     </div>
-    <br/>
     <br/>
     <div>
         <h2>Change color themes</h2>
