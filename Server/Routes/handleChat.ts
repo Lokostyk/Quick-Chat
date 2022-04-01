@@ -56,7 +56,7 @@ router.post("/getChat",async(req,res)=>{
     try{
         //If userTwoId is empty it will search for group chat
         if(req.body.userTwoId){
-            const singleChat = await chatModel.findOne({groupName:null,$set:{users:[req.body.userOneId,req.body.userTwoId]}},{messages:0})
+            const singleChat = await chatModel.findOne({groupName:null,users:{$all:[req.body.userOneId,req.body.userTwoId]}},{messages:0})
             res.send(singleChat)
         }else {
             const groupChat = await chatModel.findOne({_id:req.body.userOneId},{messages:0})

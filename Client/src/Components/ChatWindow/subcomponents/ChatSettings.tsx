@@ -14,12 +14,13 @@ export default function ChatSettings({otherUsersData,chatData}:{otherUsersData:f
     axios.post(`${URL}/handleChat/addUser`,{userId,chatId:chatData._id})
     setUserId("")  
   }
-  //UserTwo in need when converastion is a single chat
+  //UserTwo is needed when converastion is a single chat
   const kickUser = (userId:string,chatId:string,userTwoId?:string) => {
       axios.post(`${URL}/handleChat/kickUser`,{userId,chatId,userTwoId})
       window.location.reload()
   }
-  return (<div className="chatSettingsContainer" id="chatSettingsContainer" onClick={e=>e.stopPropagation()}>
+  return (
+    <div className="chatSettingsContainer" id="chatSettingsContainer" onClick={e=>e.stopPropagation()}>
       <h2 className="title">
         Conversation members
         <hr />

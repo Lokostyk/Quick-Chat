@@ -29,7 +29,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       mesContainer?.scroll({top:mesContainer.scrollHeight})
     })
     
-    if(!chatData.groupName || chatData.users.length === 2){
+    if(!chatData.groupName){
       const otherUserId = chatData.users.filter(id=>id !== state._id)
       axios.post(`${URL}/handleUser/getUserById`,{id:otherUserId})
       .then(res=>{
@@ -88,7 +88,6 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
       if(entries[0].isIntersecting){
         const messagesContainer = document.querySelector(".messagesContainer")
         //Prevent from loading more when last message is displayed
-        console.log(messagesContainer?.scrollHeight,messagesContainer?.clientHeight)
         if(messagesContainer && messagesContainer?.scrollHeight <= messagesContainer?.clientHeight) return
         setLoad(true)
         axios.post(`${URL}/handleChat/getMoreMessages`,{id:chatData._id,howMany:messages.length})
@@ -133,8 +132,7 @@ export default function ChatWindow({chatData,socket}:{chatData:fetchedChatData,s
     }else {
       chatSettingsContainer.style.height = `${messagesContainer.clientHeight-0.5}px`
       window.addEventListener("click",()=>{
-              chatSettingsContainer.style.height = `0px`
-
+        chatSettingsContainer.style.height = `0px`
       })
     }
   }
