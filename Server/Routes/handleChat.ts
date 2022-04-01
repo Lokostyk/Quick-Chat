@@ -32,6 +32,7 @@ router.post("/createGroup",(req,res)=>{
         newChat.save()
         .then(async()=>{
             await userModel.updateOne({_id:req.body.userOneId},{$push:{joinedChats:newChat._id.toString()}})
+            res.send("")
         })
     }catch (err){
         console.log(err)
@@ -96,8 +97,10 @@ router.post("/kickUser",async (req,res)=>{
     try{
         if(req.body.userTwoId){
             await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.userTwoId}})
+            res.send("")
         }else {
             await userModel.updateOne({_id:req.body.userId},{$pull:{joinedChats:req.body.chatId}})
+            res.send("")
         }
     }catch (err){
         console.log(err)

@@ -17,9 +17,11 @@ export default function CreateGroup({setCreateGroup}:{setCreateGroup:React.Dispa
   const createGroup = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if(/^\s*$/.test(groupData.groupName)) return
-    axios.post(`${URL}/handleChat/createGroup`,groupData)
+    axios.post(`${URL}/handleChat/createGroup`,groupData).then((res)=>{
+      window.location.reload()
+    })
+    console.log("first")
     setGroupData({...groupData,groupName:"",isPrivate:false})
-    window.location.reload()
   }
   return (
     <FirstPlanWindow setShowWindow={setCreateGroup}>
